@@ -85,7 +85,7 @@ df_rangkuman = safe_load_csv("Rangkuman.csv", {
 df_profil = safe_load_csv("Profil Hutan KPH Sumedang.csv", {
     'No': [1, 2, 3, 4, 5],
     'Kecamatan / BKPH': ['Ujungjaya', 'Tomo', 'Jatigede', 'Tanjungkerta', 'Conggeang'],
-    'Luas Hutan Pinus (Ha)': [7200, 6800, 6150, 5900, 5800]
+    'Luas Hutan Pinus (Ha)': [10500, 11200, 10150, 5900, 5800]
 })
 df_komposisi = safe_load_csv("Komposisi Hasil Hutan.csv", {
     'Kategori': ['Getah Pinus (HHBK)', 'Kayu Log Komersial', 'Valuasi Serapan Karbon'],
@@ -96,19 +96,19 @@ df_produksi = safe_load_csv("Produksi Hasil Hutan.csv", {
     'Nilai': [5450, 24800]
 })
 
-# Konstanta Dasar Penelitian Kelompok 6
+# Konstanta Dasar Penelitian Kelompok 2
 luas_total_hutan = 31850
 volume_getah_tahunan = 5450  # Ton
 volume_kayu_tahunan = 24800   # m³
 
 # ==========================================
-# 3. ADVANCED SIDEBAR NAVIGATION
+# 3. BRANDING LOGO & NAVIGATION
 # ==========================================
 logo_path = "OIP.webp"
 if os.path.exists(logo_path):
     st.sidebar.image(Image.open(logo_path), use_container_width=True)
 
-st.sidebar.markdown("<h2 style='text-align: center; margin-top:0; font-size:18px; color:#1b5e20; font-weight:700;'>PBL KELOMPOK 6</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='text-align: center; margin-top:0; font-size:18px; color:#1b5e20; font-weight:700;'>PBL KELOMPOK 2</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #64748b; font-size:12px; margin-top:-10px;'>Ekonomi Sumber Daya Alam & Lingkungan</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
@@ -118,7 +118,7 @@ menu = st.sidebar.radio(
     [
         "🏠 Beranda Korporat Utama", 
         "📄 Karakteristik & Hayati Wilayah", 
-        "📦 Neraca Aliran Produksi", 
+        "📦 Neraca Aliran Production", 
         "💰 Valuasi TEV & Ekonomi Makro",
         "⚖️ Batas Kebijakan Trade-Off",
         "📊 Simulator Finansial Interaktif",
@@ -135,7 +135,7 @@ if menu == "🏠 Beranda Korporat Utama":
     <div class="hero-banner">
         <h1 style="color: white; margin: 0; font-size: 38px; font-weight:700; letter-spacing: -1px;">KPH SUMEDANG ECO-FOREST VALUATION</h1>
         <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.95; font-weight: 400;">
-            Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan
+            Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan - PBL Kelompok 2
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -151,13 +151,13 @@ if menu == "🏠 Beranda Korporat Utama":
         dapat dioptimalkan tanpa mendegradasi fungsi perlindungan lingkungan hidup (*sustainable forest management*).
         """)
         
-        st.markdown("### 👥 Identitas Peneliti Kelompok 6:")
+        st.markdown("### 👥 Identitas Peneliti Kelompok 2:")
         st.markdown("""
         * **Mata Kuliah:** Ekonomi Sumber Daya Alam dan Lingkungan  
         * **Institusi:** Fakultas Ekonomi dan Bisnis, Universitas Islam Bandung (UNISBA)  
         * **Dosen Pengampu:** Yuhka Sundaya, S.E., M.Si.  
         
-        **Susunan Anggota Tim:**
+        **Susunan Anggota Tim Kelompok 2:**
         1. 🧑‍💻 **Radea Rahman Dwiyana** (10090224001)
         2. 👩‍💻 **Bunga Wiati Manaki** (10090224026)
         3. 🧑‍💻 **Shidqi Alhamdani Mieftah** (10090224032)
@@ -251,7 +251,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
 # ==========================================
 # MODUL 3: NERACA ALIRAN PRODUKSI
 # ==========================================
-elif menu == "📦 Neraca Aliran Produksi":
+elif menu == "📦 Neraca Aliran Production":
     st.header("📦 Neraca Aliran Output Hasil Produksi Tahunan")
     st.write("Visualisasi perbandingan kuantitas fisik komoditas primer kayu log (m³) dengan produk non-kayu getah pinus (Ton):")
     
@@ -297,7 +297,7 @@ elif menu == "💰 Valuasi TEV & Ekonomi Makro":
         st.write("""
         Melalui pemodelan Total Economic Value (TEV), kita dapat membuktikan secara matematis di hadapan dosen bahwa **Getah Pinus (HHBK) menguasai 70% total valuasi nilai ekonomi**. 
         
-        Angka ini menjadi pijakan argumen yang sangat solid bagi Kelompok 6 untuk menyatakan bahwa pembangunan ekonomi kehutanan tidak harus merusak lingkungan; pemanfaatan jasa non-kayu terbukti jauh lebih menguntungkan secara finansial jangka panjang.
+        Angka ini menjadi pijakan argumen yang sangat solid bagi Kelompok 2 untuk menyatakan bahwa pembangunan ekonomi kehutanan tidak harus merusak lingkungan; pemanfaatan jasa non-kayu terbukti jauh lebih menguntungkan secara finansial jangka panjang.
         """)
 
 # ==========================================
@@ -327,7 +327,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         
     st.markdown("""
     <div class="info-box-success">
-        <h4>💡 Resolusi Konseptual Kelompok 6: Optimalisasi HHBK Berkelanjutan</h4>
+        <h4>💡 Resolusi Konseptual Kelompok 2: Optimalisasi HHBK Berkelanjutan</h4>
         <p>Berdasarkan temuan ilmiah kami, rasio kelayakan <b>BCR baseline mencapai 2.85 (di atas 1)</b>. Hal ini menunjukkan bahwa skema pemanfaatan Getah Pinus (HHBK) adalah solusi ekuilibrium terbaik. Skema ini mengizinkan kegiatan ekonomi berjalan secara optimal tanpa mengorbankan tegakan pohon pokok yang memegang peranan krusial sebagai penyerap emisi gas rumah kaca di KPH Sumedang.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -344,13 +344,13 @@ elif menu == "📊 Simulator Finansial Interaktif":
         "Atur Prakiraan Harga Jual Getah Pinus Pasar (Rupiah / Kilogram):",
         min_value=5000,
         max_value=25000,
-        value=11500, # Titik harga dasar operasional
+        value=11500,
         step=500
     )
     
-    # ADVANCED MATHEMATICAL ECONOMIC COMPUTATION (DYNAMIC MODEL)
+    # ADVANCED MATHEMATICAL ECONOMIC COMPUTATION
     omset_getah_live = volume_getah_tahunan * 1000 * harga_simulasi
-    omset_kayu_statis = volume_kayu_tahunan * 650000  # Estimasi rata-rata nilai jual kayu log
+    omset_kayu_statis = volume_kayu_tahunan * 650000
     total_omset_live = omset_getah_live + omset_kayu_statis
     
     rasio_indeks = harga_simulasi / 11500
@@ -360,7 +360,6 @@ elif menu == "📊 Simulator Finansial Interaktif":
     st.write("---")
     st.markdown("### 📈 Proyeksi Indikator Finansial Dinamis")
     
-    # Visualisasi Metrik Responsif
     v1, v2, v3 = st.columns(3)
     with v1:
         st.metric(label="Proyeksi NPV Dinamis", value=f"Rp {int(npv_live):,}", delta=f"{((rasio_indeks-1)*100):+.1f}% Pergeseran")
@@ -371,7 +370,6 @@ elif menu == "📊 Simulator Finansial Interaktif":
 
     st.write("---")
     
-    # Plotly Chart yang Bergerak Responsif Terhadap Perubahan Slider
     chart_df = pd.DataFrame({
         'Kategori Sumber Omset': ['Getah Pinus (Dinamis)', 'Kayu Log Komersial (Statis)'],
         'Nilai Pendapatan Bruto (Rp)': [omset_getah_live, omset_kayu_statis]
