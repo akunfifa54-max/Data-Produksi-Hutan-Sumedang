@@ -1,0 +1,8 @@
+ID,Variabel,Nilai,Satuan,Tahun,Keterangan
+1,Struktur biaya,Investasi + Operasional,-,2024,Proxy biaya pengelolaan
+2,NPV pinus,198500000,Rp/ha,2024,Hasil simulasi
+3,IRR pinus,15.8,%,2024,Hasil simulasi
+4,BCR pinus,2.85,Rasio,2024,Hasil simulasi
+5,Pendapatan tahunan,57225000000,Rp/tahun,2024,Nilai ekonomi getah
+6,Nilai karbon,8875000000,Rp/tahun,2024,Jasa lingkungan
+7,Total nilai ekonomi,66100000000,Rp/tahun,2024,Agregat ekonomi
