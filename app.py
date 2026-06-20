@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+from PIL import Image
 
 # ==========================================
 # 1. KONFIGURASI HALAMAN
@@ -12,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS untuk gaya visual yang bersih dan aman dari error
+# Custom CSS untuk gaya visual yang bersih, modern, dan aman dari error
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -69,9 +70,18 @@ except Exception as e:
     st.stop()
 
 # ==========================================
-# 3. SIDEBAR NAVIGATION
+# 3. SIDEBAR NAVIGATION (Dengan Logo Lokal OIP.webp)
 # ==========================================
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616561.png", width=80)
+logo_path = "OIP.webp"
+if os.path.exists(logo_path):
+    try:
+        img_logo = Image.open(logo_path)
+        st.sidebar.image(img_logo, width=100)
+    except Exception as e:
+        st.sidebar.warning("Gagal memuat file logo OIP.webp")
+else:
+    st.sidebar.info("Tempatkan file OIP.webp di repositori GitHub Anda untuk memunculkan logo.")
+
 st.sidebar.markdown("### **Navigasi Panel**")
 menu = st.sidebar.radio(
     "Pilih Halaman:",
@@ -80,7 +90,7 @@ menu = st.sidebar.radio(
 )
 
 # ==========================================
-# MENU 1: HOME (Judul & Identitas)
+# MENU 1: HOME (Judul & Identitas Kampus Lengkap)
 # ==========================================
 if menu == "🏠 Home":
     st.markdown("""
@@ -89,12 +99,25 @@ if menu == "🏠 Home":
         <p style="margin: 5px 0 15px 0; font-size: 18px; opacity: 0.9;">
             Valuasi Ekonomi & Monitoring Ekosistem Hutan Kota (Tahun Acuan 2025)
         </p>
-        <hr style="border-color: rgba(255,255,255,0.2);">
-        <p style="margin:0; font-size: 15px;"><strong>UNIVERSITAS ISLAM BANDUNG</strong></p>
-        <p style="margin:0; font-size: 14px;">Ekonomi Sumber Daya Alam dan Lingkungan</p>
-        <br>
-        <p style="margin:0; font-size: 13px; font-weight: bold;">KELOMPOK 2:</p>
-        <p style="margin:0; font-size: 13px;">1. Dadang (Ketua) | 2. Anggota 2 | 3. Anggota 3 | 4. Anggota 4</p>
+        <hr style="border-color: rgba(255,255,255,0.2); margin-bottom: 15px;">
+        <table style="color: white; font-size: 14px; border: none; width: 100%;">
+            <tr style="background: transparent;">
+                <td style="padding: 2px 0; width: 150px; font-weight: bold;">Institusi</td>
+                <td style="padding: 2px 0;">: UNIVERSITAS ISLAM BANDUNG</td>
+            </tr>
+            <tr style="background: transparent;">
+                <td style="padding: 2px 0; font-weight: bold;">Mata Kuliah</td>
+                <td style="padding: 2px 0;">: Ekonomi Sumber Daya Alam dan Lingkungan</td>
+            </tr>
+            <tr style="background: transparent;">
+                <td style="padding: 2px 0; font-weight: bold;">Dosen Pengampu</td>
+                <td style="padding: 2px 0;">: Yuhka Sundaya, S.E., M.Si.</td>
+            </tr>
+            <tr style="background: transparent;">
+                <td style="padding: 2px 0; font-weight: bold; vertical-align: top;">Kelompok 2</td>
+                <td style="padding: 2px 0;">: 1. Dadang (Ketua) | 2. Anggota 2 | 3. Anggota 3 | 4. Anggota 4</td>
+            </tr>
+        </table>
     </div>
     """, unsafe_allow_html=True)
 
@@ -156,47 +179,4 @@ elif menu == "📊 Dashboard Profil":
             names='Kategori', 
             color_discrete_sequence=px.colors.sequential.Greens_r
         )
-        st.plotly_chart(fig_pie, use_container_width=True)
-    
-    with c2:
-        st.markdown("### Detail Parameter Vegetasi")
-        st.table(df_veg)
-
-# ==========================================
-# MENU 3: ANALISIS EKONOMI
-# ==========================================
-elif menu == "📈 Analisis Ekonomi":
-    st.subheader("📈 Tren Nilai Ekonomi vs Biaya Pengelolaan")
-    
-    # Grafik 1: Perbandingan Finansial (Line Chart)
-    fig_eco = px.line(
-        df_trend, 
-        x="Tahun", 
-        y=["Nilai Ekonomi (Rp)", "Biaya Pengelolaan (Rp)"],
-        title="Perbandingan Nilai Jasa Lingkungan vs Biaya Operasional",
-        markers=True, 
-        color_discrete_sequence=["#2e7d32", "#e53935"]
-    )
-    fig_eco.update_layout(yaxis_title="Rupiah (Rp)", hovermode="x unified")
-    st.plotly_chart(fig_eco, use_container_width=True)
-    
-    st.write("---")
-    
-    # Grafik 2: Tren Pengunjung (Bar Chart)
-    fig_visitor = px.bar(
-        df_trend, 
-        x="Tahun", 
-        y="Pengunjung", 
-        title="Tren Pertumbuhan Pengunjung Tahunan",
-        color="Pengunjung", 
-        color_continuous_scale="Greens"
-    )
-    st.plotly_chart(fig_visitor, use_container_width=True)
-
-    st.markdown("""
-    <div class="card" style="background: white; padding: 15px; border-radius: 10px; border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        💡 <b>Analisis:</b> Berdasarkan data historis hingga tahun target, Nilai Ekonomi Lingkungan jauh melampaui 
-        Biaya Pengelolaan operasional kawasan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan 
-        jasa lingkungan yang sangat menguntungkan bagi ekonomi publik serta masyarakat Kota Bandung.
-    </div>
-    """, unsafe_allow_html=True)
+        st.plotly_chart(fig_pie, use_container_width
