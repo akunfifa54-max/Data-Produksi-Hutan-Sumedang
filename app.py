@@ -183,17 +183,4 @@ elif menu == "💰 Pemodelan TEV":
     col_left, col_right = st.columns([1, 1])
 
     with col_left:
-        st.markdown("### **1. Nilai Guna Langsung (Direct Use)**")
-        p = st.slider("Asumsi Jumlah Pengunjung Berbayar / Tahun", 5000, 30000, 18000, step=1000)
-        direct_use = p * harga_tiket
-        st.caption(f"Estimasi Nilai Rekreasi: Rp {direct_use:,.0f}")
-        
-        st.markdown("### **2. Nilai Guna Tidak Langsung (Indirect Use)**")
-        r = st.slider("Estimasi Volume Penyerapan Karbon (Ton/Thn)", 50, 150, 95, step=5)
-        indirect_use = r * harga_karbon
-        st.caption(f"Estimasi Jasa Regulasi Udara: Rp {indirect_use:,.0f}")
-
-    with col_right:
-        st.markdown("### **3. Nilai Pilihan & Keberadaan (Non-Use Value)**")
-        c = st.slider("Nilas Jasa Pendidikan & Penelitian (Rp Juta/Thn)", 10, 100, 45) * 1000000
-        s = st.slider("Nilai Warisan Keanekaragaman Hayati (Rp Juta/Thn)", 1
+        st.markdown("### **1. Nilai Guna Langsung (Direct
