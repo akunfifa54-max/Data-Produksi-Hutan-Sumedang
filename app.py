@@ -1,7 +1,7 @@
 import streamlit as st
 
 # =========================
-# CONFIG
+# PAGE CONFIG
 # =========================
 st.set_page_config(
     page_title="Eco-Forest Valuation",
@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 # =========================
-# CSS STYLE
+# CSS STYLE (BIAR MIRIP DASHBOARD PRO)
 # =========================
 st.markdown("""
 <style>
@@ -24,74 +24,89 @@ h1, h2, h3 {
 }
 
 [data-testid="stSidebar"] {
-    background-color: #f0f2f6;
+    background-color: #f5f7fa;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# HEADER
+# HEADER (STYLE KAMPUS + DASHBOARD)
 # =========================
 st.markdown("""
 # 🌳 Eco-Forest Valuation  
 ### Aplikasi Pembelajaran Ekonomi Sumber Daya Hutan  
-**Referensi: Tietenberg & Lewis (Chapter 13)**  
 
 ---
 
 ## UNIVERSITAS ISLAM BANDUNG  
 Fakultas Ekonomi dan Bisnis | Ekonomi Pembangunan  
 
-### Tugas Kelompok: Ekonomi Sumber Daya Hutan (Kalimantan Selatan)
+**Tugas Kelompok: Sistem Valuasi Ekonomi Hutan (TEV - Tietenberg & Lewis)**
 """)
 
 st.divider()
 
 # =========================
-# SIDEBAR MENU
+# SIDEBAR (SEPERTI DASHBOARD KPH CEPU)
 # =========================
-menu = st.sidebar.radio(
-    "📚 PILIH MODUL PEMBELAJARAN",
+menu = st.sidebar.selectbox(
+    "📌 PILIH MODUL PEMBELAJARAN",
     [
-        "Halaman Utama & Teori",
-        "Modul 1: Kalkulator TEV",
-        "Modul 2: Analisis Trade-off",
-        "Modul 3: Kebijakan PES",
-        "Modul 4: Kasus Interaktif"
+        "🏠 Halaman Utama",
+        "📘 Teori Ekosistem Hutan",
+        "💰 Modul TEV Calculator",
+        "⚖️ Trade-off Analysis",
+        "🌿 PES Simulation",
+        "🌳 Studi Kasus"
     ]
 )
 
 # =========================
-# HOME / TEORI
+# HOME / TEORI UTAMA
 # =========================
-if menu == "Halaman Utama & Teori":
+if menu == "🏠 Halaman Utama":
 
-    st.subheader("📘 Teori Dasar Ekonomi Ekosistem Hutan")
+    st.subheader("📌 Rencana Alur Pembelajaran")
+    st.info("Fase 1 → Teori | Fase 2 → Valuasi | Fase 3 → Simulasi | Fase 4 → Evaluasi")
 
-    st.write("""
-Ekonomi sumber daya hutan berfokus pada nilai total ekosistem yang disebut **Total Economic Value (TEV)**.
-    """)
+    st.markdown("""
+### 📚 Deskripsi Aplikasi
+Aplikasi ini digunakan untuk memahami nilai ekonomi hutan berdasarkan konsep **Total Economic Value (TEV)**.
 
-    st.markdown("### 📊 Klasifikasi Jasa Lingkungan")
+---
+
+### 🎯 Tujuan Pembelajaran
+- Memahami jasa lingkungan hutan
+- Menghitung nilai ekonomi ekosistem
+- Menganalisis trade-off pemanfaatan hutan
+- Simulasi kebijakan PES
+""")
+
+# =========================
+# TEORI
+# =========================
+elif menu == "📘 Teori Ekosistem Hutan":
+
+    st.subheader("🌿 Klasifikasi Jasa Lingkungan")
 
     st.table({
         "Kategori": ["Provisioning", "Regulating", "Cultural", "Supporting"],
         "Definisi": [
-            "Penyedia barang fisik langsung",
-            "Pengatur proses alam",
-            "Manfaat rekreasi & spiritual",
-            "Proses dasar ekosistem"
+            "Barang langsung dari hutan",
+            "Pengatur iklim & karbon",
+            "Wisata & spiritual",
+            "Siklus ekosistem dasar"
         ],
         "Contoh": [
-            "Kayu, air, hasil hutan",
-            "Karbon, penyerbukan",
-            "Ekowisata, estetika",
-            "Siklus nutrisi"
+            "Kayu, air",
+            "Karbon, udara bersih",
+            "Ekowisata",
+            "Fotosintesis"
         ],
-        "Metode Valuasi": [
+        "Metode": [
             "Market Price",
             "Replacement Cost",
-            "Travel Cost / WTP",
+            "WTP / Travel Cost",
             "Indirect Valuation"
         ]
     })
@@ -99,89 +114,82 @@ Ekonomi sumber daya hutan berfokus pada nilai total ekosistem yang disebut **Tot
     st.markdown("""
 ---
 
-### 📈 Komposisi TEV Hutan Tropis
-- Regulating Services: **45%**
-- Provisioning (Kayu): **25%**
-- Cultural Services: **20%**
-- Supporting Services: **10%**
+### 📊 Komposisi TEV Hutan Tropis
+- Regulating: **45%**
+- Provisioning: **25%**
+- Cultural: **20%**
+- Supporting: **10%**
 
-👉 Menunjukkan bahwa nilai terbesar hutan bukan hanya kayu, tetapi fungsi ekologisnya.
+👉 Menunjukkan nilai terbesar hutan berasal dari fungsi ekologis, bukan kayu.
 """)
 
 # =========================
-# MODUL 1 TEV
+# TEV CALCULATOR
 # =========================
-elif menu == "Modul 1: Kalkulator TEV":
+elif menu == "💰 Modul TEV Calculator":
 
-    st.subheader("💰 Kalkulator Total Economic Value (TEV)")
+    st.subheader("💰 Total Economic Value")
 
-    provisioning = st.number_input("Nilai Provisioning (Kayu)", 0)
-    regulating = st.number_input("Nilai Regulating (Karbon)", 0)
-    cultural = st.number_input("Nilai Cultural (Wisata)", 0)
-    supporting = st.number_input("Nilai Supporting", 0)
+    p = st.number_input("Provisioning Value", 0)
+    r = st.number_input("Regulating Value", 0)
+    c = st.number_input("Cultural Value", 0)
+    s = st.number_input("Supporting Value", 0)
 
-    tev = provisioning + regulating + cultural + supporting
+    tev = p + r + c + s
 
-    st.success(f"Total Economic Value (TEV): Rp {tev:,.0f}")
+    st.success(f"TOTAL TEV = Rp {tev:,.0f}")
 
 # =========================
-# MODUL 2 TRADE-OFF
+# TRADE OFF
 # =========================
-elif menu == "Modul 2: Analisis Trade-off":
+elif menu == "⚖️ Trade-off Analysis":
 
-    st.subheader("⚖️ Trade-off Pemanfaatan Hutan")
+    st.subheader("⚖️ Pemanfaatan Hutan")
 
-    kayu = st.slider("Intensitas Penebangan Kayu", 0, 100, 30)
-    konservasi = 100 - kayu
+    exploit = st.slider("Intensitas Eksploitasi", 0, 100, 40)
+    conservation = 100 - exploit
 
-    st.write("📊 Hasil Analisis:")
-    st.write(f"- Eksploitasi Kayu: {kayu}%")
-    st.write(f"- Konservasi: {konservasi}%")
+    st.write(f"🔴 Eksploitasi: {exploit}%")
+    st.write(f"🟢 Konservasi: {conservation}%")
 
-    if kayu > 60:
+    if exploit > 60:
         st.error("Risiko deforestasi tinggi!")
     else:
-        st.success("Pemanfaatan masih berkelanjutan")
+        st.success("Masih dalam batas berkelanjutan")
 
 # =========================
-# MODUL 3 PES
+# PES
 # =========================
-elif menu == "Modul 3: Kebijakan PES":
+elif menu == "🌿 PES Simulation":
 
-    st.subheader("🌿 Payment for Ecosystem Services (PES)")
+    st.subheader("🌿 Payment for Ecosystem Services")
 
     st.write("""
-PES adalah mekanisme pembayaran untuk menjaga jasa lingkungan.
-    """)
+PES adalah sistem pembayaran untuk menjaga jasa lingkungan hutan.
+""")
 
-    st.markdown("""
-Contoh:
-- Petani menjaga hutan → dibayar pemerintah
-- Perusahaan karbon → membayar konservasi
-    """)
+    budget = st.number_input("Dana PES (Rp)", 0)
 
-    dana = st.number_input("Dana PES (Rp)", 0)
-
-    if dana > 1000000:
-        st.success("Program PES berjalan efektif")
+    if budget > 1000000:
+        st.success("Program PES efektif berjalan")
     else:
-        st.warning("Dana masih rendah untuk dampak signifikan")
+        st.warning("Dana masih kurang optimal")
 
 # =========================
-# MODUL 4 KASUS
+# CASE STUDY
 # =========================
-elif menu == "Modul 4: Kasus Interaktif":
+elif menu == "🌳 Studi Kasus":
 
-    st.subheader("🌳 Studi Kasus: Hutan Tropis Kalimantan Selatan")
+    st.subheader("🌳 Studi Kasus Hutan Tropis")
 
-    opsi = st.selectbox(
+    choice = st.selectbox(
         "Pilih Kebijakan",
         ["Eksploitasi Kayu", "Konservasi Total", "Eco-Tourism"]
     )
 
-    if opsi == "Eksploitasi Kayu":
+    if choice == "Eksploitasi Kayu":
         st.error("Pendapatan tinggi jangka pendek, kerusakan lingkungan tinggi")
-    elif opsi == "Konservasi Total":
-        st.success("Lingkungan terjaga, pendapatan ekonomi rendah")
+    elif choice == "Konservasi Total":
+        st.success("Lingkungan terjaga, ekonomi rendah")
     else:
-        st.info("Keseimbangan ekonomi dan lingkungan lebih optimal")
+        st.info("Keseimbangan ekonomi & lingkungan optimal")
