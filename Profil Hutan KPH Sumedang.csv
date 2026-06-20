@@ -1,0 +1,10 @@
+ID,Variabel,Nilai,Satuan,Tahun,Keterangan
+1,Nama kawasan,KPH Sumedang,-,2024,Kesatuan Pemangkuan Hutan
+2,Lokasi administratif,"Sumedang, Jawa Barat",-,2024,Wilayah kerja
+3,Luas hutan,31850,ha,2024,Hutan produksi
+4,Jenis hutan,Hutan Produksi,-,2024,Produksi pinus
+5,Kelas perusahaan,Pinus,-,2024,KP Pinus
+6,Jenis pohon dominan,Pinus merkusii,-,2024,Komoditas utama
+7,Jumlah BKPH,9,unit,2024,Estimasi wilayah kerja
+8,Jumlah RPH,32,unit,2024,Resort Pemangkuan Hutan
+9,Pengelola,Perhutani,-,2024,BUMN Kehutanan
