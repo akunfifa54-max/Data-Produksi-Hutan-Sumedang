@@ -4,13 +4,13 @@ import streamlit as st
 # CONFIG
 # =========================
 st.set_page_config(
-    page_title="Babakan Siliwangi Dashboard",
+    page_title="BL 6 - Eco Forest",
     page_icon="🌳",
     layout="wide"
 )
 
 # =========================
-# CSS (DASHBOARD STYLE RAPI)
+# CSS DASHBOARD STYLE
 # =========================
 st.markdown("""
 <style>
@@ -41,169 +41,171 @@ h1, h2, h3 {
     color: #1b5e20;
 }
 
-[data-testid="stSidebar"] {
-    background-color: #f5f7f6;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# HEADER (KHUSUS BAKSIL)
+# HEADER (BL 6 STYLE + DISESUIKAN)
 # =========================
 st.markdown("""
-# 🌳 BABAKAN SILIWANGI DASHBOARD  
-### Urban Forest & Ruang Terbuka Hijau Kota Bandung  
+# 🌳 BL 6 — Eco-Forest Valuation System  
+## Aplikasi Analisis Ekonomi Sumber Daya Hutan  
 
 ---
 
-## UNIVERSITAS ISLAM BANDUNG  
-Fakultas Ekonomi dan Bisnis | Ekonomi Pembangunan  
+### Mata Kuliah  
+Ekonomi Sumber Daya Alam dan Lingkungan  
 
-**Analisis Nilai Ekonomi Hutan Kota (Urban Forest Valuation)**
+### Dosen Pengampu  
+Yuhka Sundaya, S.E., M.Si.
+
+---
+
+## KELOMPOK 4  
+- Salsa Zahratul Aulia (10090224004)  
+- Aida Farida Kultsum (10090224014)  
+- Nabil Athala Naufal (10090224022)  
 """)
 
 st.divider()
 
 # =========================
-# SIDEBAR
+# SIDEBAR MENU (KPH CEPU STYLE)
 # =========================
 menu = st.sidebar.radio(
-    "📌 MENU",
+    "📌 NAVIGASI SISTEM",
     [
-        "🏠 Overview",
-        "📘 Konsep Hutan Kota",
-        "💰 Nilai Ekonomi (TEV)",
-        "⚖️ Trade-off Pemanfaatan",
-        "🌿 Jasa Lingkungan",
-        "📊 Studi Kasus"
+        "🏠 Dashboard Utama",
+        "🌳 Profil Hutan",
+        "🪵 Produksi & Data",
+        "📊 Master Data",
+        "📈 Dashboard Summary",
+        "⚙️ Simulasi Valuasi"
     ]
 )
 
 # =========================
-# HOME
+# DASHBOARD UTAMA
 # =========================
-if menu == "🏠 Overview":
+if menu == "🏠 Dashboard Utama":
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown('<div class="metric-box">🌳 Hutan Kota Bandung</div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box">🌳 Profil Hutan</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="metric-box">🏙️ Babakan Siliwangi</div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box">🪵 Produksi Kayu</div>', unsafe_allow_html=True)
 
     with col3:
-        st.markdown('<div class="metric-box">🌿 Urban Ecosystem</div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric-box">📊 Master Data</div>', unsafe_allow_html=True)
 
     st.markdown("""
     <div class="card">
-    <h3>📌 Deskripsi</h3>
-    Babakan Siliwangi adalah <b>hutan kota (urban forest)</b> di Bandung yang berfungsi sebagai:
-    ruang terbuka hijau, wisata alam, dan penyeimbang ekosistem perkotaan.
+    <h3>📌 Deskripsi Aplikasi</h3>
+
+    Aplikasi ini digunakan untuk analisis ekonomi sumber daya hutan pada kawasan 
+    <b>Babakan Siliwangi / Hutan Kota Bandung</b> berbasis konsep valuasi ekonomi lingkungan.
+
+    <br><br>
+    Fitur utama:
+    <ul>
+        <li>Profil Hutan</li>
+        <li>Produksi / Aktivitas Ekosistem</li>
+        <li>Master Data Lingkungan</li>
+        <li>Simulasi Valuasi Ekonomi (TEV)</li>
+        <li>Dashboard Summary</li>
+        <li>Analisis Ekonomi Lingkungan</li>
+    </ul>
     </div>
     """, unsafe_allow_html=True)
 
 # =========================
-# KONDISI HUTAN KOTA
+# PROFIL HUTAN
 # =========================
-elif menu == "📘 Konsep Hutan Kota":
+elif menu == "🌳 Profil Hutan":
 
     st.markdown("""
     <div class="card">
-    <h3>🌿 Fungsi Babakan Siliwangi</h3>
+    <h3>🌳 Babakan Siliwangi (Urban Forest Bandung)</h3>
 
-    • Paru-paru Kota Bandung  
-    • Ruang rekreasi masyarakat  
-    • Pengendali suhu mikro kota  
-    • Penyerapan karbon  
-    • Edukasi lingkungan  
+    • Fungsi: Ruang Terbuka Hijau (RTH)  
+    • Lokasi: Kota Bandung  
+    • Status: Hutan Kota / Urban Forest  
+    • Fungsi Ekonomi: Rekreasi, karbon, edukasi  
+    • Fungsi Ekologi: Penyerapan CO₂, penyejuk kota  
     </div>
     """, unsafe_allow_html=True)
 
 # =========================
-# TEV (URBAN VERSION)
+# PRODUKSI / DATA
 # =========================
-elif menu == "💰 Nilai Ekonomi (TEV)":
+elif menu == "🪵 Produksi & Data":
 
-    st.subheader("💰 Total Economic Value Hutan Kota")
+    st.markdown("""
+    <div class="card">
+    <h3>🪵 Aktivitas Ekosistem (Proxy Produksi)</h3>
 
-    p = st.number_input("Nilai Rekreasi (Wisata)", 0)
-    r = st.number_input("Nilai Penyerapan Karbon", 0)
-    c = st.number_input("Nilai Edukasi & Estetika", 0)
-    s = st.number_input("Nilai Ekologi Pendukung", 0)
+    Dalam konteks hutan kota, “produksi” diartikan sebagai:
+    <ul>
+        <li>Jumlah kunjungan masyarakat</li>
+        <li>Aktivitas wisata alam</li>
+        <li>Pemanfaatan ruang publik</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="metric-box">📊 Data bersifat estimasi berbasis tren urban tourism</div>', unsafe_allow_html=True)
+
+# =========================
+# MASTER DATA
+# =========================
+elif menu == "📊 Master Data":
+
+    st.markdown("""
+    <div class="card">
+    <h3>📊 Struktur Data Ekonomi Hutan</h3>
+
+    • Provisioning → udara, air  
+    • Regulating → karbon, suhu  
+    • Cultural → wisata, estetika  
+    • Supporting → biodiversitas  
+    </div>
+    """, unsafe_allow_html=True)
+
+# =========================
+# DASHBOARD SUMMARY
+# =========================
+elif menu == "📈 Dashboard Summary":
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown('<div class="metric-box">🌳 Ekosistem Stabil</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="metric-box">💰 Nilai Ekonomi Tinggi</div>', unsafe_allow_html=True)
+
+    with col3:
+        st.markdown('<div class="metric-box">🌿 Fungsi Lingkungan Aktif</div>', unsafe_allow_html=True)
+
+# =========================
+# SIMULASI
+# =========================
+elif menu == "⚙️ Simulasi Valuasi":
+
+    st.subheader("💰 Simulasi Total Economic Value (TEV)")
+
+    p = st.number_input("Provisioning", 0)
+    r = st.number_input("Regulating", 0)
+    c = st.number_input("Cultural", 0)
+    s = st.number_input("Supporting", 0)
 
     total = p + r + c + s
 
     st.markdown(f"""
     <div class="metric-box">
-    TOTAL NILAI EKONOMI BABAKAN SILIWANGI<br><br>
+    TOTAL ECONOMIC VALUE (TEV)<br><br>
     Rp {total:,.0f}
     </div>
     """, unsafe_allow_html=True)
-
-# =========================
-# TRADE OFF
-# =========================
-elif menu == "⚖️ Trade-off Pemanfaatan":
-
-    st.subheader("⚖️ Pemanfaatan vs Konservasi")
-
-    eksploitasi = st.slider("Intensitas Aktivitas Manusia (%)", 0, 100, 40)
-    konservasi = 100 - eksploitasi
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown(f"""
-        <div class="metric-box">
-        🚶 Aktivitas Wisata<br>{eksploitasi}%
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown(f"""
-        <div class="metric-box">
-        🌿 Fungsi Ekologis<br>{konservasi}%
-        </div>
-        """, unsafe_allow_html=True)
-
-    if eksploitasi > 70:
-        st.error("⚠ Tekanan lingkungan tinggi pada hutan kota")
-    else:
-        st.success("✔ Masih dalam batas berkelanjutan")
-
-# =========================
-# JASA LINGKUNGAN
-# =========================
-elif menu == "🌿 Jasa Lingkungan":
-
-    st.markdown("""
-    <div class="card">
-    <h3>🌳 Kategori Jasa Lingkungan Babakan Siliwangi</h3>
-
-    <b>Provisioning:</b> udara bersih, air tanah<br>
-    <b>Regulating:</b> karbon, suhu kota<br>
-    <b>Cultural:</b> wisata, rekreasi, edukasi<br>
-    <b>Supporting:</b> habitat biodiversitas
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# STUDI KASUS
-# =========================
-elif menu == "📊 Studi Kasus":
-
-    st.subheader("🌳 Babakan Siliwangi Case Study")
-
-    opsi = st.selectbox(
-        "Pilih Skenario Pengelolaan",
-        ["Konservasi Ketat", "Wisata Intensif", "Balanced Management"]
-    )
-
-    if opsi == "Konservasi Ketat":
-        st.success("Lingkungan sangat terjaga, akses publik terbatas")
-    elif opsi == "Wisata Intensif":
-        st.warning("Ekonomi naik, tekanan lingkungan meningkat")
-    else:
-        st.info("Keseimbangan antara ekologi dan ekonomi")
