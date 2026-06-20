@@ -14,7 +14,7 @@ st.set_page_config(
 )
 
 # =========================
-# CSS TAMPILAN
+# CSS
 # =========================
 st.markdown("""
 <style>
@@ -39,10 +39,7 @@ h1, h2, h3, h4 {
 col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
-    st.image(
-       with col2:
     st.image("OIP.webp", width=180)
-    )
 
 st.markdown("""
 <div style="text-align:center;">
@@ -98,16 +95,11 @@ if menu == "Home":
     ### Fitur
     - Data produksi
     - Visualisasi tren
-    - Analisis sederhana
-    - Prediksi produksi
+    - Prediksi sederhana
 
     ### Sumber Data
     Open Data Jawa Barat
     """)
-
-    st.metric("Total Data", len(df))
-    st.metric("Jenis Kayu", df["jenis_kayu"].nunique())
-    st.metric("Total Produksi", f"{df['produksi'].sum():,.0f}")
 
 # =========================
 # DATA
@@ -185,19 +177,19 @@ elif menu == "Prediksi":
     model = LinearRegression()
     model.fit(X, y)
 
-    tahun = st.number_input(
+    tahun_prediksi = st.number_input(
         "Masukkan Tahun",
         min_value=int(df["tahun"].max()),
         value=int(df["tahun"].max() + 1)
     )
 
-    pred = model.predict([[tahun]])[0]
+    prediksi = model.predict([[tahun_prediksi]])[0]
 
-    st.metric("Hasil Prediksi", f"{pred:,.0f}")
+    st.metric("Prediksi Produksi", f"{prediksi:,.0f}")
 
     hasil = pd.DataFrame({
-        "tahun": list(filtered["tahun"]) + [tahun],
-        "produksi": list(filtered["produksi"]) + [pred]
+        "tahun": list(filtered["tahun"]) + [tahun_prediksi],
+        "produksi": list(filtered["produksi"]) + [prediksi]
     })
 
     fig = px.line(
