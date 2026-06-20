@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS untuk gaya visual yang bersih dan aman dari error
+# Custom CSS ditulis dalam baris pendek agar tidak terpotong
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -91,7 +91,8 @@ menu = st.sidebar.radio(
 # MENU 1: HOME
 # ==========================================
 if menu == "🏠 Home":
-    st.markdown("""
+    # HTML Banner dipisah menjadi baris string konvensional agar aman dari cut-off
+    html_banner = """
     <div class="banner">
         <h1 style="color: white; margin:0; font-size: 38px;">BABAKAN SILIWANGI CITY FOREST</h1>
         <h3 style="color: #a5d6a7; margin: 5px 0 0 0; font-size: 22px; font-weight: bold;">PBL 6</h3>
@@ -122,30 +123,13 @@ if menu == "🏠 Home":
             </tr>
         </table>
     </div>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(html_banner, unsafe_allow_html=True)
 
     col_a, col_b = st.columns([1, 1])
     with col_a:
         jenis_hutan = df_profil.loc[df_profil['Parameter'] == 'Jenis Hutan', 'Nilai'].values[0]
         status_hutan = df_profil.loc[df_profil['Parameter'] == 'Status', 'Nilai'].values[0]
-        st.markdown(f"""
-        <div class="info-card">
-            <h4>🌿 Deskripsi Kawasan</h4>
-            <p>Babakan Siliwangi (Baksil) adalah <b>{jenis_hutan}</b> di Kota Bandung dengan status <b>{status_hutan}</b>. 
-            Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat ekosistem perkotaan.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_b:
-        ketinggian = df_profil.loc[df_profil['Parameter'] == 'Ketinggian', 'Nilai'].values[0]
-        curah_hujan = df_profil.loc[df_profil['Parameter'] == 'Curah Hujan (mm/tahun)', 'Nilai'].values[0]
-        suhu = df_profil.loc[df_profil['Parameter'] == 'Suhu Rata-rata (C)', 'Nilai'].values[0]
-        vegetasi = df_profil.loc[df_profil['Parameter'] == 'Dominan Vegetasi', 'Nilai'].values[0]
-        st.markdown(f"""
-        <div class="info-card">
-            <h4>📑 Parameter Lingkungan</h4>
-            <ul>
-                <li><b>Ketinggian:</b> {ketinggian} mdpl</li>
-                <li><b>Curah Hujan:</b> {curah_hujan} mm/tahun</li>
-                <li><b>Suhu Rata-rata:</b> {suhu}°C</li>
-                <li><b>Veget
+        
+        # String dibentuk secara ringkas tanpa menggunakan multi-line literal f-string yang berisiko
+        txt_deskripsi = f'<div class="info-card"><h4>🌿 Deskripsi Kawasan</h4><p>Babakan Siliwangi (Baksil) adalah <b>{jenis_hutan}</b> di Kota Bandung dengan status <b>{status_hutan}</b>. Kawasan
