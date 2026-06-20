@@ -8,7 +8,7 @@ import numpy as np
 # CONFIG HALAMAN
 # =========================
 st.set_page_config(
-    page_title="Dashboard Babakan Siliwangi",
+    page_title="Babakan Siliwangi Dashboard",
     page_icon="🌳",
     layout="wide"
 )
@@ -34,6 +34,11 @@ h1, h2, h3, h4 {
 """, unsafe_allow_html=True)
 
 # =========================
+# LOAD DATA (SUDAH FIX)
+# =========================
+df = pd.read_csv("babakan_siliwangi.csv")
+
+# =========================
 # COVER MAKALAH
 # =========================
 col1, col2, col3 = st.columns([1,2,1])
@@ -57,25 +62,19 @@ st.markdown("""
 
 st.markdown("""
 ### Kelompok 2
-- Radea Rahman Dwiyana
-- Bunga Wiati Manaki
-- Shidqi Alhamdani
+- Dadang
+- Anggota 2
+- Anggota 3
+- Anggota 4
 """)
 
 st.divider()
 
 # =========================
-# LOAD DATA
-# =========================
-df = pd.read_csv("babakan_siliwangi.csv")
-
-# =========================
 # SIDEBAR MENU
 # =========================
-st.sidebar.title("📊 Menu")
-
 menu = st.sidebar.radio(
-    "Pilih Halaman",
+    "Menu",
     ["Home", "Data", "Visualisasi", "Prediksi"]
 )
 
@@ -96,17 +95,17 @@ if menu == "Home":
     Babakan Siliwangi adalah hutan kota di Bandung yang berfungsi sebagai ruang terbuka hijau dan wisata alam.
 
     ### Fungsi
-    - Paru-paru kota Bandung
-    - Wisata alam dan edukasi
-    - Ruang terbuka hijau (RTH)
+    - RTH Kota Bandung
+    - Wisata alam & edukasi
+    - Paru-paru kota
 
-    ### Sumber Data
-    Data kunjungan estimasi berbasis tren wisata Kota Bandung
+    ### Catatan Data
+    Data “produksi” diubah menjadi jumlah kunjungan sebagai indikator aktivitas ekonomi.
     """)
 
-    st.metric("Total Tahun Data", len(df))
-    st.metric("Rata-rata Kunjungan", int(df["kunjungan"].mean()))
-    st.metric("Total Kunjungan", int(df["kunjungan"].sum()))
+    st.metric("Total Tahun", df["tahun"].nunique())
+    st.metric("Rata-rata Kunjungan", int(df["produksi"].mean()))
+    st.metric("Total Kunjungan", int(df["produksi"].sum()))
 
 # =========================
 # DATA
@@ -134,7 +133,7 @@ elif menu == "Visualisasi":
     fig = px.line(
         df,
         x="tahun",
-        y="kunjungan",
+        y="produksi",
         markers=True,
         title="Tren Kunjungan Babakan Siliwangi"
     )
@@ -144,13 +143,11 @@ elif menu == "Visualisasi":
     fig2 = px.bar(
         df,
         x="tahun",
-        y="kunjungan",
+        y="produksi",
         title="Kunjungan per Tahun"
     )
 
     st.plotly_chart(fig2, use_container_width=True)
-
-    st.write(df["kunjungan"].describe())
 
 # =========================
 # PREDIKSI
@@ -160,7 +157,7 @@ elif menu == "Prediksi":
     st.title("🔮 Prediksi Kunjungan")
 
     X = df[["tahun"]]
-    y = df["kunjungan"]
+    y = df["produksi"]
 
     model = LinearRegression()
     model.fit(X, y)
@@ -175,18 +172,17 @@ elif menu == "Prediksi":
 
     st.metric("Prediksi Kunjungan", f"{pred:,.0f}")
 
-    # grafik prediksi
     df_pred = pd.DataFrame({
         "tahun": list(df["tahun"]) + [tahun_pred],
-        "kunjungan": list(df["kunjungan"]) + [pred]
+        "produksi": list(df["produksi"]) + [pred]
     })
 
     fig = px.line(
         df_pred,
         x="tahun",
-        y="kunjungan",
+        y="produksi",
         markers=True,
-        title="Prediksi Kunjungan Babakan Siliwangi"
+        title="Prediksi Kunjungan"
     )
 
     st.plotly_chart(fig, use_container_width=True)
