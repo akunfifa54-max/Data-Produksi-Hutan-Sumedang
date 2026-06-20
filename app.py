@@ -13,32 +13,30 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS Dark Mode & Vertikal Pendek agar anti-cut-off
+# Custom CSS Tema Terang Kompatibel & Vertikal Pendek agar anti-cut-off
 st.markdown("""
 <style>
-    .block-container { padding: 2rem 4rem; background-color: #0e1117; }
-    h1, h2, h3 { font-family: 'Inter', sans-serif; color: #4caf50; }
+    .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
+    h1, h2, h3 { font-family: 'Inter', sans-serif; color: #1b5e20; }
     .banner {
-        background: linear-gradient(135deg, #1b5e20, #0d3c12);
+        background: linear-gradient(135deg, #1b5e20, #2e7d32);
         color: white; padding: 35px; border-radius: 20px; margin-bottom: 30px;
-        border: 1px solid #2e7d32;
     }
     .metric-card {
-        background: #1a1c23; border: 1px solid #2e7d32; border-radius: 15px;
-        padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        background: white; border: 1px solid #e0e0e0; border-radius: 15px;
+        padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
-    .metric-title { font-size: 13px; color: #a5d6a7; text-transform: uppercase; font-weight: bold; }
-    .metric-value { font-size: 28px; font-weight: 700; color: #81c784; margin-top: 5px; }
+    .metric-title { font-size: 13px; color: #666; text-transform: uppercase; font-weight: bold; }
+    .metric-value { font-size: 28px; font-weight: 700; color: #2e7d32; margin-top: 5px; }
+    
+    /* Perbaikan kartu informasi: Latar belakang hijau muda pastel, teks hijau tua */
     .info-card {
-        background-color: #142116 !important; border-left: 5px solid #4caf50;
+        background-color: #e8f5e9 !important; border-left: 5px solid #4caf50;
         padding: 20px; border-radius: 10px; margin-bottom: 20px; 
-        color: #e8f5e9 !important; border-top: 1px solid #1b5e20;
-        border-right: 1px solid #1b5e20; border-bottom: 1px solid #1b5e20;
+        color: #1b5e20 !important;
     }
-    .info-card h4 { color: #81c784 !important; margin-top: 0; }
-    .info-card p, .info-card ul { color: #c8e6c9 !important; }
-    /* Menyelaraskan teks standar Streamlit di dalam info-card */
-    .info-card stMarkdown, .info-card p { color: #c8e6c9 !important; }
+    .info-card h4 { color: #1b5e20 !important; margin-top: 0; font-weight: bold; }
+    .info-card p, .info-card ul, .info-card li { color: #2e7d32 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -165,8 +163,7 @@ elif menu == "📊 Dashboard Profil":
         names='Kategori',
         color_discrete_sequence=px.colors.sequential.Greens_r
         )
-        # Menyesuaikan chart ke tema gelap
-        fig_pie.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig_pie, use_container_width=True)
     
     with c2:
@@ -199,9 +196,9 @@ elif menu == "📈 Analisis Ekonomi":
     y=kolom_y,
     title="Perbandingan Jasa Lingkungan vs Biaya",
     markers=True,
-    color_discrete_sequence=["#81c784", "#e53935"]
+    color_discrete_sequence=["#2e7d32", "#e53935"]
     )
-    fig_eco.update_layout(template="plotly_dark", yaxis_title="Rupiah", hovermode="x unified", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig_eco.update_layout(yaxis_title="Rupiah", hovermode="x unified", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig_eco, use_container_width=True)
     
     st.write("---")
@@ -214,12 +211,12 @@ elif menu == "📈 Analisis Ekonomi":
     color=kolom_visitor,
     color_continuous_scale="Greens"
     )
-    fig_visitor.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig_visitor.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig_visitor, use_container_width=True)
 
     ta = "".join([
-        '<div class="card" style="background: #1a1c23; padding: 15px; border-radius: 10px; ',
-        'border-top: 4px solid #4caf50; box-shadow: 0 2px 8px rgba(0,0,0,0.5); color: #c8e6c9;">💡 ',
+        '<div class="card" style="background: white; padding: 15px; border-radius: 10px; ',
+        'border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05); color: #1b5e20;">💡 ',
         '<b>Analisis:</b> Berdasarkan data historis, Nilai Ekonomi Lingkungan jauh melampaui ',
         'Biaya Pengelolaan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan ',
         'jasa lingkungan bagi publik Kota Bandung.</div>'
