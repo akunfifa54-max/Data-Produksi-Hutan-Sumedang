@@ -1,24 +1,26 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import pydeck as pdk
 
 # =========================
 # CONFIG
 # =========================
 st.set_page_config(
-    page_title="BL 6 - Eco Forest Valuation",
+    page_title="Babakan Siliwangi A+ Dashboard",
     page_icon="🌳",
     layout="wide"
 )
 
 # =========================
-# CSS STYLE
+# STYLE
 # =========================
 st.markdown("""
 <style>
 
 .block-container {
     padding: 2rem 3rem;
+    background-color: #fbfcfb;
 }
 
 h1, h2, h3 {
@@ -27,24 +29,20 @@ h1, h2, h3 {
 }
 
 .card {
-    background-color: #ffffff;
+    background: white;
     padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     margin-bottom: 15px;
 }
 
-.metric-box {
+.metric {
     background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
     padding: 18px;
     border-radius: 12px;
     text-align: center;
     font-weight: bold;
     color: #1b5e20;
-}
-
-[data-testid="stSidebar"] {
-    background-color: #f5f7f6;
 }
 
 </style>
@@ -54,18 +52,19 @@ h1, h2, h3 {
 # HEADER
 # =========================
 st.markdown("""
-# 🌳 BL 6 — Eco-Forest Valuation System  
-## Babakan Siliwangi (Urban Forest Bandung)
-
-### Ekonomi Sumber Daya Alam dan Lingkungan  
-### Yuhka Sundaya, S.E., M.Si.
+# 🌳 BABAKAN SILIWANGI A+ DASHBOARD  
+### Urban Forest & Ekonomi Lingkungan Bandung  
 
 ---
 
-## KELOMPOK 4  
-- Salsa Zahratul Aulia (10090224004)  
-- Aida Farida Kultsum (10090224014)  
-- Nabil Athala Naufal (10090224022)  
+## UNIVERSITAS ISLAM BANDUNG  
+Ekonomi Sumber Daya Alam dan Lingkungan  
+
+## KELOMPOK 2  
+- Dadang  
+- Anggota 2  
+- Anggota 3  
+- Anggota 4  
 """)
 
 st.divider()
@@ -75,103 +74,114 @@ st.divider()
 # =========================
 menu = st.sidebar.radio(
     "📌 MENU",
-    [
-        "🏠 Dashboard",
-        "🌳 Profil Hutan",
-        "📊 Data Simulasi",
-        "📈 Visualisasi",
-        "⚙️ TEV Calculator"
-    ]
+    ["Dashboard", "Peta", "TEV Model", "Grafik Ekonomi"]
 )
 
 # =========================
-# DATA SIMULASI (BABAKAN SILIWANGI)
+# DATA SIMULASI
 # =========================
-data = pd.DataFrame({
+df = pd.DataFrame({
     "tahun": [2019, 2020, 2021, 2022, 2023],
     "pengunjung": [12000, 13500, 11000, 16000, 18000],
-    "carbon_absorption": [80, 85, 83, 90, 95]
+    "karbon": [80, 85, 83, 90, 95]
 })
 
 # =========================
 # DASHBOARD
 # =========================
-if menu == "🏠 Dashboard":
+if menu == "Dashboard":
 
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.markdown('<div class="metric-box">🌳 Profil Hutan<br><h2>19</h2></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric">🌳 Profil<br><h2>19</h2></div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown('<div class="metric-box">🪵 Produksi<br><h2>12</h2></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric">🪵 Aktivitas<br><h2>12</h2></div>', unsafe_allow_html=True)
 
     with col3:
-        st.markdown('<div class="metric-box">📊 Master Data<br><h2>28</h2></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric">📊 Data<br><h2>28</h2></div>', unsafe_allow_html=True)
 
     with col4:
-        st.markdown('<div class="metric-box">📈 Dashboard<br><h2>6</h2></div>', unsafe_allow_html=True)
+        st.markdown('<div class="metric">📈 Modul<br><h2>6</h2></div>', unsafe_allow_html=True)
 
     st.divider()
 
     st.markdown("""
     <div class="card">
-    <h3>📌 Babakan Siliwangi Urban Forest</h3>
-    Hutan kota sebagai ruang terbuka hijau dengan fungsi ekonomi, ekologi, dan sosial.
+    <h3>📌 Babakan Siliwangi</h3>
+    Urban forest sebagai sistem ekonomi-ekologi perkotaan yang memiliki nilai jasa lingkungan tinggi.
     </div>
     """, unsafe_allow_html=True)
 
 # =========================
-# PROFIL
+# 🗺️ MAP (BABAKAN SILIWANGI)
 # =========================
-elif menu == "🌳 Profil Hutan":
+elif menu == "Peta":
 
-    st.markdown("""
-    <div class="card">
-    <h3>🌳 Babakan Siliwangi</h3>
+    st.subheader("🗺️ Lokasi Babakan Siliwangi")
 
-    • Urban Forest Kota Bandung  
-    • Fungsi rekreasi & edukasi  
-    • Penyerap karbon  
-    • Pengatur suhu kota  
-    </div>
-    """, unsafe_allow_html=True)
+    st.pydeck_chart(pdk.Deck(
+        map_style="mapbox://styles/mapbox/light-v9",
+        initial_view_state=pdk.ViewState(
+            latitude=-6.8895,
+            longitude=107.6107,
+            zoom=15,
+            pitch=40,
+        ),
+        layers=[
+            pdk.Layer(
+                "ScatterplotLayer",
+                data=pd.DataFrame({
+                    "lat": [-6.8895],
+                    "lon": [107.6107]
+                }),
+                get_position='[lon, lat]',
+                get_color='[0, 150, 0, 160]',
+                get_radius=80
+            )
+        ],
+    ))
 
-# =========================
-# DATA
-# =========================
-elif menu == "📊 Data Simulasi":
-
-    st.dataframe(data, use_container_width=True)
-
-# =========================
-# VISUALISASI
-# =========================
-elif menu == "📈 Visualisasi":
-
-    fig1 = px.line(data, x="tahun", y="pengunjung", title="Tren Pengunjung Babakan Siliwangi")
-    st.plotly_chart(fig1, use_container_width=True)
-
-    fig2 = px.bar(data, x="tahun", y="carbon_absorption", title="Serapan Karbon")
-    st.plotly_chart(fig2, use_container_width=True)
+    st.caption("📍 Babakan Siliwangi - Kota Bandung")
 
 # =========================
-# TEV CALCULATOR
+# TEV MODEL
 # =========================
-elif menu == "⚙️ TEV Calculator":
+elif menu == "TEV Model":
 
-    st.subheader("💰 Total Economic Value (TEV)")
+    st.subheader("💰 Model Total Economic Value (TEV)")
 
-    p = st.number_input("Rekreasi (Pengunjung)", 0)
-    r = st.number_input("Karbon", 0)
-    c = st.number_input("Edukasi", 0)
-    s = st.number_input("Ekologi", 0)
+    p = st.slider("Provisioning (Rekreasi)", 0, 100, 40)
+    r = st.slider("Regulating (Karbon)", 0, 100, 60)
+    c = st.slider("Cultural (Wisata)", 0, 100, 70)
+    s = st.slider("Supporting (Ekologi)", 0, 100, 50)
 
     total = p + r + c + s
 
     st.markdown(f"""
-    <div class="metric-box">
+    <div class="metric">
     TOTAL TEV<br><br>
     Rp {total:,.0f}
+    </div>
+    """, unsafe_allow_html=True)
+
+# =========================
+# GRAFIK EKONOMI
+# =========================
+elif menu == "Grafik Ekonomi":
+
+    st.subheader("📊 Analisis Ekonomi Babakan Siliwangi")
+
+    fig1 = px.line(df, x="tahun", y="pengunjung", title="Tren Pengunjung")
+    st.plotly_chart(fig1, use_container_width=True)
+
+    fig2 = px.bar(df, x="tahun", y="karbon", title="Serapan Karbon")
+    st.plotly_chart(fig2, use_container_width=True)
+
+    st.markdown("""
+    <div class="card">
+    Analisis menunjukkan bahwa peningkatan pengunjung berbanding dengan meningkatnya kesadaran lingkungan,
+    sementara fungsi karbon tetap stabil sebagai jasa ekosistem utama.
     </div>
     """, unsafe_allow_html=True)
