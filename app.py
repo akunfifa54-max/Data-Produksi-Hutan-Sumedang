@@ -13,7 +13,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS untuk gaya visual yang bersih, modern, dan aman dari error
+# Custom CSS untuk gaya visual yang bersih dan aman dari error
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -50,7 +50,7 @@ def load_csv_data(file_name):
     if os.path.exists(file_name):
         return pd.read_csv(file_name)
     else:
-        st.error(f"File data '{file_name}' tidak ditemukan di GitHub!")
+        st.error(f"File '{file_name}' tidak ditemukan!")
         st.stop()
 
 df_ringkasan = load_csv_data(files["ringkasan"])
@@ -59,28 +59,26 @@ df_jaling = load_csv_data(files["jasa_lingkungan"])
 df_veg = load_csv_data(files["tutupan_lahan"])
 df_trend = load_csv_data(files["trend"])
 
-# Ekstraksi Variabel Kunci secara Dinamis dari CSV
+# Ekstraksi Variabel Kunci
 try:
     luas_kawasan = df_ringkasan.loc[df_ringkasan['Variabel'] == 'Luas Kawasan', 'Nilai'].values[0]
     total_pengunjung = df_ringkasan.loc[df_ringkasan['Variabel'] == 'Jumlah Pengunjung', 'Nilai'].values[0]
     total_valuasi = df_ringkasan.loc[df_ringkasan['Variabel'] == 'Nilai Ekonomi Lingkungan', 'Nilai'].values[0]
     serapan_karbon = df_jaling.loc[df_jaling['Indikator'].str.contains('Serapan Karbon'), 'Nilai'].values[0]
 except Exception as e:
-    st.error("Gagal memproses kolom data CSV. Periksa isi file Anda.")
+    st.error("Gagal memproses kolom data CSV.")
     st.stop()
 
 # ==========================================
-# 3. SIDEBAR NAVIGATION (Dengan Logo Lokal OIP.webp)
+# 3. SIDEBAR NAVIGATION & LOGO
 # ==========================================
 logo_path = "OIP.webp"
 if os.path.exists(logo_path):
     try:
         img_logo = Image.open(logo_path)
         st.sidebar.image(img_logo, width=100)
-    except Exception as e:
-        st.sidebar.warning("Gagal memuat file logo OIP.webp")
-else:
-    st.sidebar.info("Tempatkan file OIP.webp di repositori GitHub Anda untuk memunculkan logo.")
+    except:
+        pass
 
 st.sidebar.markdown("### **Navigasi Panel**")
 menu = st.sidebar.radio(
@@ -90,7 +88,7 @@ menu = st.sidebar.radio(
 )
 
 # ==========================================
-# MENU 1: HOME (Judul & Identitas Kampus Lengkap)
+# MENU 1: HOME
 # ==========================================
 if menu == "🏠 Home":
     st.markdown("""
@@ -125,7 +123,6 @@ if menu == "🏠 Home":
     with col_a:
         jenis_hutan = df_profil.loc[df_profil['Parameter'] == 'Jenis Hutan', 'Nilai'].values[0]
         status_hutan = df_profil.loc[df_profil['Parameter'] == 'Status', 'Nilai'].values[0]
-        
         st.markdown(f"""
         <div class="info-card">
             <h4>🌿 Deskripsi Kawasan</h4>
@@ -139,7 +136,6 @@ if menu == "🏠 Home":
         curah_hujan = df_profil.loc[df_profil['Parameter'] == 'Curah Hujan (mm/tahun)', 'Nilai'].values[0]
         suhu = df_profil.loc[df_profil['Parameter'] == 'Suhu Rata-rata (C)', 'Nilai'].values[0]
         vegetasi = df_profil.loc[df_profil['Parameter'] == 'Dominan Vegetasi', 'Nilai'].values[0]
-        
         st.markdown(f"""
         <div class="info-card">
             <h4>📑 Parameter Lingkungan</h4>
@@ -179,4 +175,12 @@ elif menu == "📊 Dashboard Profil":
             names='Kategori', 
             color_discrete_sequence=px.colors.sequential.Greens_r
         )
-        st.plotly_chart(fig_pie, use_container_width
+        # Tanda kurung diturunkan bertahap agar tidak terpotong
+        st.plotly_chart(
+            fig_pie, 
+            use_container_width=True
+        )
+    
+    with c2:
+        st.markdown("### Detail Parameter Vegetasi")
+        st
