@@ -1,243 +1,123 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
 
-# =========================
-# CONFIG
-# =========================
+# --- KONFIGURASI HALAMAN ---
 st.set_page_config(
-    page_title="BL 6 - Eco Forest Valuation",
+    page_title="Eco-Forest Valuation KPH Cepu",
     page_icon="🌳",
     layout="wide"
 )
 
-# =========================
-# CSS DASHBOARD STYLE
-# =========================
-st.markdown("""
-<style>
+# --- HEADER APLIKASI ---
+st.title("🌳 Eco-Forest Valuation Dashboard")
+st.subheader("Analisis Nilai Ekonomi Total (Total Economic Value) - KPH Cepu")
+st.markdown("---")
 
-.block-container {
-    padding: 2rem 3rem;
-}
+# --- SIDEBAR: INPUT DATA & PARAMETER ---
+st.sidebar.header("📊 Parameter Valuasi")
 
-h1, h2, h3 {
-    text-align: center;
-    color: #1b5e20;
-}
+# Pilihan Input Data
+data_source = st.sidebar.radio("Pilih Sumber Data:", ("Gunakan Data Standar (Simulasi)", "Unggah File CSV/Excel"))
 
-.card {
-    background-color: #ffffff;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
-    margin-bottom: 15px;
-}
+# Default Data jika user tidak upload file
+default_data = pd.DataFrame({
+    'Blok/Resort': ['Blok A', 'Blok B', 'Blok C', 'Blok D'],
+    'Luas_Ha': [120, 250, 85, 190],
+    'Volume_Kayu_M3': [2400, 5200, 1600, 3900],
+    'Estimasi_Karbon_Ton': [3600, 7500, 2550, 5700]
+})
 
-.metric-box {
-    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-    padding: 18px;
-    border-radius: 12px;
-    text-align: center;
-    font-weight: bold;
-    color: #1b5e20;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
-}
+if data_source == "Unggah File CSV/Excel":
+    uploaded_file = st.sidebar.file_uploader("Unggah file Anda di sini", type=["csv", "xlsx"])
+    if uploaded_file is not None:
+        if uploaded_file.name.endswith('.csv'):
+            df = pd.read_csv(uploaded_file)
+        else:
+            df = pd.read_excel(uploaded_file)
+        st.sidebar.success("File berhasil diunggah!")
+    else:
+        st.sidebar.info("Menampilkan data simulasi sementara.")
+        df = default_data
+else:
+    df = default_data
 
-[data-testid="stSidebar"] {
-    background-color: #f5f7f6;
-}
+# Nilai Asumsi Ekonomi (Bisa diubah-ubah oleh user via Sidebar)
+st.sidebar.markdown("### 💰 Asumsi Harga Pasar")
+harga_kayu = st.sidebar.number_input("Harga Kayu rata-rata (Rp / m³)", value=2500000, step=100000)
+harga_karbon = st.sidebar.number_input("Harga Karbon Per Ton (Rp)", value=150000, step=10000)
+jasa_air = st.sidebar.number_input("Nilai Jasa Air & Wisata (Rp / Hektar / Tahun)", value=500000, step=50000)
 
-</style>
-""", unsafe_allow_html=True)
 
-# =========================
-# HEADER
-# =========================
-st.markdown("""
-# 🌳 BL 6 — Eco-Forest Valuation System  
-## Babakan Siliwangi (Urban Forest Bandung)
+# --- PROSES PERHITUNGAN VALUASI ---
+# 1. Valuasi Kayu
+df['Nilai_Ekonomi_Kayu'] = df['Volume_Kayu_M3'] * harga_kayu
 
----
+# 2. Valuasi Karbon
+df['Nilai_Ekonomi_Karbon'] = df['Estimasi_Karbon_Ton'] * harga_karbon
 
-### Mata Kuliah  
-Ekonomi Sumber Daya Alam dan Lingkungan  
+# 3. Valuasi Jasa Lingkungan
+df['Nilai_Jasa_Lingkungan'] = df['Luas_Ha'] * jasa_air
 
-### Dosen Pengampu  
-Yuhka Sundaya, S.E., M.Si.
+# 4. Total Nilai Ekonomi per Blok
+df['Total_Valuasi'] = df['Nilai_Ekonomi_Kayu'] + df['Nilai_Ekonomi_Karbon'] + df['Nilai_Jasa_Lingkungan']
 
----
 
-## KELOMPOK 4  
-- Salsa Zahratul Aulia (10090224004)  
-- Aida Farida Kultsum (10090224014)  
-- Nabil Athala Naufal (10090224022)  
-""")
+# --- DISPLAY UTAMA ---
 
-st.divider()
+# Tampilan Metrics Ringkasan Total
+total_luas = df['Luas_Ha'].sum()
+total_valuasi_idr = df['Total_Valuasi'].sum()
+total_karbon_ton = df['Estimasi_Karbon_Ton'].sum()
 
-# =========================
-# SIDEBAR
-# =========================
-menu = st.sidebar.radio(
-    "📌 NAVIGASI",
-    [
-        "🏠 Dashboard Utama",
-        "🌳 Profil Hutan",
-        "🪵 Produksi",
-        "📊 Master Data",
-        "📈 Dashboard",
-        "⚙️ Simulasi TEV"
-    ]
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric(label="🌳 Total Luas Area Analisis", value=f"{total_luas:,} Ha")
+with col2:
+    st.metric(label="🌱 Total Serapan Karbon", value=f"{total_karbon_ton:,} Ton")
+with col3:
+    st.metric(label="💰 Total Nilai Ekonomi (TEV)", value=f"Rp {total_valuasi_idr:,.0f}")
+
+st.markdown("---")
+
+# Layout Grafik dan Tabel
+tab1, tab2 = st.tabs(["📊 Grafik Analisis", "📋 Tabel Data"])
+
+with tab1:
+    st.write("### Komposisi Nilai Ekonomi Hutan")
+    
+    # Transformasi data untuk grafik stacked bar
+    df_melted = df.melt(id_vars=['Blok/Resort'], 
+                        value_vars=['Nilai_Ekonomi_Kayu', 'Nilai_Ekonomi_Karbon', 'Nilai_Jasa_Lingkungan'],
+                        var_name='Jenis Valuasi', value_name='Nilai (Rp)')
+    
+    # Ganti nama label biar rapi di grafik
+    df_melted['Jenis Valuasi'] = df_melted['Jenis Valuasi'].str.replace('_', ' ')
+
+    fig = px.bar(df_melted, x='Blok/Resort', y='Nilai (Rp)', color='Jenis Valuasi',
+                 title="Distribusi Nilai Ekonomi Berdasarkan Blok/Resort di KPH Cepu",
+                 barmode='stack', text_auto='.2s')
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+with tab2:
+    st.write("### Detail Data Hasil Perhitungan")
+    
+    # Format mata uang untuk tampilan tabel
+    df_formatted = df.copy()
+    for col in ['Nilai_Ekonomi_Kayu', 'Nilai_Ekonomi_Karbon', 'Nilai_Jasa_Lingkungan', 'Total_Valuasi']:
+        df_formatted[col] = df_formatted[col].apply(lambda x: f"Rp {x:,.0f}")
+        
+    st.dataframe(df_formatted, use_container_width=True)
+
+# Fitur Unduh Hasil Analisis
+st.markdown("---")
+st.write("### 📥 Ekspor Hasil")
+csv_data = df.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="Unduh Data Valuasi (.CSV)",
+    data=csv_data,
+    file_name='Hasil_Valuasi_EcoForest_KPH_Cepu.csv',
+    mime='text/csv',
 )
-
-# =========================
-# DASHBOARD UTAMA (KPI STYLE)
-# =========================
-if menu == "🏠 Dashboard Utama":
-
-    st.markdown("## 📊 Dashboard Ringkasan")
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.markdown("""
-        <div class="metric-box">
-        🌳 Profil Hutan<br><br>
-        <h2>19</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div class="metric-box">
-        🪵 Produksi<br><br>
-        <h2>12</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown("""
-        <div class="metric-box">
-        📊 Master Data<br><br>
-        <h2>28</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown("""
-        <div class="metric-box">
-        📈 Dashboard<br><br>
-        <h2>6</h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.divider()
-
-    st.markdown("""
-    <div class="card">
-    <h3>📌 Deskripsi Aplikasi</h3>
-
-    Aplikasi ini digunakan untuk analisis ekonomi sumber daya hutan pada kawasan 
-    <b>Babakan Siliwangi (Urban Forest Bandung)</b>.
-
-    <br><br>
-    Fitur utama:
-    <ul>
-        <li>Profil Hutan</li>
-        <li>Produksi / Aktivitas Ekosistem</li>
-        <li>Master Data Lingkungan</li>
-        <li>Simulasi TEV</li>
-        <li>Dashboard Summary</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# PROFIL HUTAN
-# =========================
-elif menu == "🌳 Profil Hutan":
-
-    st.markdown("""
-    <div class="card">
-    <h3>🌳 Babakan Siliwangi</h3>
-
-    Urban Forest Kota Bandung yang berfungsi sebagai:
-    <br><br>
-    • Paru-paru kota  
-    • Ruang terbuka hijau  
-    • Wisata alam  
-    • Penyerap karbon  
-    • Edukasi lingkungan  
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# PRODUKSI
-# =========================
-elif menu == "🪵 Produksi":
-
-    st.markdown("""
-    <div class="card">
-    <h3>🪵 Aktivitas Ekosistem</h3>
-
-    Dalam hutan kota, produksi tidak berupa kayu, tetapi:
-    <br>
-    • Jumlah pengunjung  
-    • Aktivitas wisata  
-    • Pemanfaatan ruang publik  
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.info("Data bersifat estimasi berbasis aktivitas urban forest")
-
-# =========================
-# MASTER DATA
-# =========================
-elif menu == "📊 Master Data":
-
-    st.markdown("""
-    <div class="card">
-    <h3>📊 Klasifikasi Jasa Lingkungan</h3>
-
-    • Provisioning: udara bersih, air tanah  
-    • Regulating: karbon, suhu  
-    • Cultural: wisata & estetika  
-    • Supporting: biodiversitas  
-    </div>
-    """, unsafe_allow_html=True)
-
-# =========================
-# DASHBOARD
-# =========================
-elif menu == "📈 Dashboard":
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.success("🌿 Ekosistem Stabil")
-
-    with col2:
-        st.success("💰 Nilai Ekonomi Tinggi")
-
-    with col3:
-        st.success("🌳 Fungsi Lingkungan Aktif")
-
-# =========================
-# SIMULASI TEV
-# =========================
-elif menu == "⚙️ Simulasi TEV":
-
-    st.subheader("💰 Total Economic Value (TEV)")
-
-    p = st.number_input("Provisioning", 0)
-    r = st.number_input("Regulating", 0)
-    c = st.number_input("Cultural", 0)
-    s = st.number_input("Supporting", 0)
-
-    total = p + r + c + s
-
-    st.markdown(f"""
-    <div class="metric-box">
-    TOTAL TEV<br><br>
-    Rp {total:,.0f}
-    </div>
-    """, unsafe_allow_html=True)
