@@ -40,14 +40,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. LOAD DATA DARI REPO GITHUB CSV
+# 2. LOAD DATA DARI REPO GITHUB CSV SIMPEL
 # ==========================================
 files = {
-    "rangkuman": "Data kph sumedang^.xlsx - Rangkuman.csv",
-    "profil": "Data kph sumedang^.xlsx - Profil Hutan KPH Sumedang.csv",
-    "komposisi": "Data kph sumedang^.xlsx - Komposisi Hasil Hutan.csv",
-    "harga_getah": "Data kph sumedang^.xlsx - Harga Getah Pinus.csv",
-    "finansial": "Data kph sumedang^.xlsx - Proxy Pengelolaan Finansial.csv"
+    "rangkuman": "rangkuman.csv",
+    "profil": "profil_hutan.csv",
+    "komposisi": "komposisi_hasil.csv",
+    "harga_getah": "harga_getah.csv",
+    "finansial": "finansial_proyek.csv"
 }
 
 def load_csv_data(file_name):
@@ -165,7 +165,6 @@ elif menu == "📊 Dashboard Profil & Komposisi":
     
     with c2:
         st.markdown("### Parameter Struktural (Administratif)")
-        # Menampilkan kolom informasi secara dinamis dan aman menggunakan indeks posisi
         df_display_profil = df_profil.iloc[:, 1:4]
         st.dataframe(df_display_profil, use_container_width=True, hide_index=True)
 
@@ -184,7 +183,6 @@ elif menu == "📈 Analisis Finansial Kelayakan":
     except:
         npv_val, irr_val, bcr_val, total_valuasi = "198500000", "15.8", "2.85", "66100000000"
 
-    # Formatting agar tampilan angka rapi dengan pemisah ribuan
     try:
         npv_card = f"Rp {int(float(npv_val)):,}"
         total_val_card = f"Rp {int(float(total_valuasi)):,}"
@@ -202,7 +200,6 @@ elif menu == "📈 Analisis Finansial Kelayakan":
     st.write("---")
     
     st.markdown("### Estimasi Perbandingan Nilai Pendapatan Bruto Berdasarkan Batas Skenario Harga Getah")
-    # Memfilter baris pendapatan bruto dari file Skenario Harga Getah
     df_bruto = df_harga[df_harga['Variabel'].str.contains('Nilai bruto', case=False)].copy()
     df_bruto['Nilai'] = pd.to_numeric(df_bruto['Nilai'], errors='coerce')
     
