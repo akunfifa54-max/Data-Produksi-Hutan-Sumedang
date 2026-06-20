@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
-from PIL import Image
 
 # ==========================================
 # 1. KONFIGURASI HALAMAN
@@ -13,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS Tema Terang Kontras Tinggi (Baris Pendek Anti-Cut-Off)
+# Custom CSS Tema Terang Kontras Tinggi
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -42,6 +41,7 @@ st.markdown("""
 # ==========================================
 # 2. LOAD DATA DARI REPO GITHUB CSV SIMPEL
 # ==========================================
+# Nama file di bawah ini disesuaikan pas dengan repositori Anda sekarang
 files = {
     "rangkuman": "rangkuman.csv",
     "profil": "profil_hutan.csv",
@@ -54,7 +54,7 @@ def load_csv_data(file_name):
     if os.path.exists(file_name):
         return pd.read_csv(file_name)
     else:
-        st.error(f"File '{file_name}' tidak ditemukan di repositori GitHub!")
+        st.error(f"⚠️ File '{file_name}' tidak ditemukan di repositori GitHub! Periksa penulisan nama file Anda.")
         st.stop()
 
 df_rangkuman = load_csv_data(files["rangkuman"])
@@ -63,15 +63,13 @@ df_komposisi = load_csv_data(files["komposisi"])
 df_harga = load_csv_data(files["harga_getah"])
 df_finansial = load_csv_data(files["finansial"])
 
-# Membersihkan nama kolom dari spasi tidak sengaja
-df_rangkuman.columns = df_rangkuman.columns.str.strip()
-df_profil.columns = df_profil.columns.str.strip()
-df_komposisi.columns = df_komposisi.columns.str.strip()
-df_harga.columns = df_harga.columns.str.strip()
-df_finansial.columns = df_finansial.columns.str.strip()
+# Membersihkan nama kolom dan data string dari spasi/kapital tidak sengaja
+for df in [df_rangkuman, df_profil, df_komposisi, df_harga, df_finansial]:
+    df.columns = df.columns.str.strip()
 
-# Mengambil metrik utama secara aman
+# Mengambil metrik utama secara aman dari file rangkuman.csv
 try:
+    df_rangkuman['variable'] = df_rangkuman['variable'].str.strip().str.lower()
     luas_hutan = df_rangkuman.loc[df_rangkuman['variable'] == 'forest_area_ha', 'value'].values[0]
     prod_getah = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_resin_production_ton', 'value'].values[0]
     prod_kayu = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_log_production_m3', 'value'].values[0]
@@ -80,16 +78,8 @@ except:
     luas_hutan, prod_getah, prod_kayu, stok_karbon = "31.850", "5.450", "24.800", "1.775.000"
 
 # ==========================================
-# 3. SIDEBAR PANEL NAVIGATION & LOGO
+# 3. SIDEBAR PANEL NAVIGATION
 # ==========================================
-logo_path = "OIP.webp"
-if os.path.exists(logo_path):
-    try:
-        img_logo = Image.open(logo_path)
-        st.sidebar.image(img_logo, width=100)
-    except:
-        pass
-
 st.sidebar.markdown("### **Navigasi Panel**")
 menu = st.sidebar.radio(
     "Pilih Halaman:",
@@ -141,13 +131,13 @@ elif menu == "📊 Dashboard Profil & Komposisi":
     
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown(f'<div class="metric-card"><div class="metric-title">Luas Wilayah Kerja</div><div class="metric-value">{luas_hutan} Ha</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Luas Wilayah Kerja</div><div class="metric-value">{luas_hutan:,} Ha</div></div>', unsafe_allow_html=True)
     with m2:
-        st.markdown(f'<div class="metric-card"><div class="metric-title">Produksi Getah / Tahun</div><div class="metric-value">{prod_getah} Ton</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Produksi Getah / Tahun</div><div class="metric-value">{prod_getah:,} Ton</div></div>', unsafe_allow_html=True)
     with m3:
-        st.markdown(f'<div class="metric-card"><div class="metric-title">Produksi Kayu / Tahun</div><div class="metric-value">{prod_kayu} m³</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Produksi Kayu / Tahun</div><div class="metric-value">{prod_kayu:,} m³</div></div>', unsafe_allow_html=True)
     with m4:
-        st.markdown(f'<div class="metric-card"><div class="metric-title">Estimasi Stok Karbon</div><div class="metric-value">{stok_karbon} Ton</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Estimasi Stok Karbon</div><div class="metric-value">{stok_karbon:,} Ton</div></div>', unsafe_allow_html=True)
 
     st.write("---")
     
@@ -176,22 +166,19 @@ elif menu == "📈 Analisis Finansial Kelayakan":
     
     col_f1, col_f2, col_f3 = st.columns(3)
     try:
+        df_finansial['Variabel'] = df_finansial['Variabel'].str.strip()
         npv_val = df_finansial.loc[df_finansial['Variabel'] == 'NPV pinus', 'Nilai'].values[0]
         irr_val = df_finansial.loc[df_finansial['Variabel'] == 'IRR pinus', 'Nilai'].values[0]
         bcr_val = df_finansial.loc[df_finansial['Variabel'] == 'BCR pinus', 'Nilai'].values[0]
         total_valuasi = df_finansial.loc[df_finansial['Variabel'] == 'Total nilai ekonomi', 'Nilai'].values[0]
+        
+        npv_formatted = f"Rp {int(float(npv_val)):,}"
+        total_formatted = f"Rp {int(float(total_valuasi)):,}"
     except:
-        npv_val, irr_val, bcr_val, total_valuasi = "198500000", "15.8", "2.85", "66100000000"
-
-    try:
-        npv_card = f"Rp {int(float(npv_val)):,}"
-        total_val_card = f"Rp {int(float(total_valuasi)):,}"
-    except:
-        npv_card = f"Rp {npv_val}"
-        total_val_card = f"Rp {total_valuasi}"
+        npv_formatted, irr_val, bcr_val, total_formatted = "Rp 198,500,000", "15.8", "2.85", "Rp 66,100,000,000"
 
     with col_f1:
-        st.markdown(f'<div class="metric-card"><div class="metric-title">NPV (Net Present Value)</div><div class="metric-value">{npv_card} / Ha</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><div class="metric-title">NPV (Net Present Value)</div><div class="metric-value">{npv_formatted} / Ha</div></div>', unsafe_allow_html=True)
     with col_f2:
         st.markdown(f'<div class="metric-card"><div class="metric-title">IRR (Internal Rate of Return)</div><div class="metric-value">{irr_val} %</div></div>', unsafe_allow_html=True)
     with col_f3:
@@ -215,7 +202,7 @@ elif menu == "📈 Analisis Finansial Kelayakan":
     st.plotly_chart(fig_bar, use_container_width=True)
 
     st.write("---")
-    st.metric(label="Total Agregat Nilai Ekonomi Keseluruhan KPH Sumedang / Tahun", value=total_val_card)
+    st.metric(label="Total Agregat Nilai Ekonomi Keseluruhan KPH Sumedang / Tahun", value=total_formatted)
 
     ta = "".join([
         '<div class="card" style="background: white; padding: 15px; border-radius: 10px; ',
@@ -223,6 +210,6 @@ elif menu == "📈 Analisis Finansial Kelayakan":
         '<b>Interpretasi Hasil Studi Ekonomi Lingkungan:</b> Proyek investasi tegakan pinus pada KPH Sumedang ',
         f'dinyatakan <b>sangat layak dijalankan</b> karena memiliki nilai Benefit-Cost Ratio (BCR) sebesar <b>{bcr_val}</b> (> 1). ',
         f'Nilai IRR sebesar <b>{irr_val}%</b> juga menunjukkan performa profitabilitas di atas rata-rata tingkat inflasi pasar, ',
-        f'ditambah akumulasi total nilai ekonomi wilayah yang mencapai {total_val_card} per tahun.</div>'
+        f'ditambah akumulasi total nilai ekonomi wilayah yang mencapai {total_formatted} per tahun.</div>'
     ])
     st.markdown(ta, unsafe_allow_html=True)
