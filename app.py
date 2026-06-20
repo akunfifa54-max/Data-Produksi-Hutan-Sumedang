@@ -2,10 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from sklearn.linear_model import LinearRegression
-import numpy as np
 
 # =========================
-# CONFIG HALAMAN
+# SET PAGE
 # =========================
 st.set_page_config(
     page_title="Babakan Siliwangi Dashboard",
@@ -14,67 +13,59 @@ st.set_page_config(
 )
 
 # =========================
-# CSS
+# CSS (BIAR RAPI SEPERTI DASHBOARD)
 # =========================
 st.markdown("""
 <style>
-h1, h2, h3, h4 {
+h1, h2, h3 {
     text-align: center;
 }
 
-.main {
-    padding-left: 50px;
-    padding-right: 50px;
+.block-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 [data-testid="stSidebar"] {
-    background-color: #f5f5f5;
+    background-color: #f0f2f6;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# LOAD DATA (SUDAH FIX)
+# LOAD DATA (WAJIB SESUAI FILE GITHUB)
 # =========================
 df = pd.read_csv("babakan_siliwangi.csv")
 
 # =========================
-# COVER MAKALAH
+# HEADER / COVER
 # =========================
 col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
     st.image(
         "https://upload.wikimedia.org/wikipedia/id/thumb/8/89/Logo_UNISBA.svg/512px-Logo_UNISBA.svg.png",
-        width=160
+        width=140
     )
 
 st.markdown("""
-<div style="text-align:center;">
-    <h2>UNIVERSITAS ISLAM BANDUNG</h2>
-    <h3>FAKULTAS EKONOMI DAN BISNIS</h3>
-    <h3>PROGRAM STUDI EKONOMI PEMBANGUNAN</h3>
-    <hr>
-    <h1>ANALISIS BABAKAN SILIWANGI CITY FOREST</h1>
-    <h4>Mata Kuliah Ekonomi Sumber Daya Alam dan Lingkungan</h4>
-</div>
-""", unsafe_allow_html=True)
+# UNIVERSITAS ISLAM BANDUNG  
+### Fakultas Ekonomi dan Bisnis  
+### Ekonomi Sumber Daya Alam dan Lingkungan  
 
-st.markdown("""
-### Kelompok 2
-- Dadang
-- Anggota 2
-- Anggota 3
-- Anggota 4
+---
+
+# 🌳 BABAKAN SILIWANGI CITY FOREST DASHBOARD
 """)
 
+st.markdown("### Kelompok 2: Dadang dkk")
 st.divider()
 
 # =========================
 # SIDEBAR MENU
 # =========================
 menu = st.sidebar.radio(
-    "Menu",
+    "MENU",
     ["Home", "Data", "Visualisasi", "Prediksi"]
 )
 
@@ -83,52 +74,33 @@ menu = st.sidebar.radio(
 # =========================
 if menu == "Home":
 
-    st.title("🌳 Babakan Siliwangi City Forest")
+    st.subheader("📌 Ringkasan")
+    
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Total Tahun", df["tahun"].nunique())
+    col2.metric("Rata-rata Kunjungan", int(df["produksi"].mean()))
+    col3.metric("Total Kunjungan", int(df["produksi"].sum()))
 
     st.image(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Forest.jpg/640px-Forest.jpg",
-        use_container_width=True
+        "https://upload.wikimedia.org/wikipedia/commons/0/07/Forest.jpg"
     )
-
-    st.markdown("""
-    ### Deskripsi
-    Babakan Siliwangi adalah hutan kota di Bandung yang berfungsi sebagai ruang terbuka hijau dan wisata alam.
-
-    ### Fungsi
-    - RTH Kota Bandung
-    - Wisata alam & edukasi
-    - Paru-paru kota
-
-    ### Catatan Data
-    Data “produksi” diubah menjadi jumlah kunjungan sebagai indikator aktivitas ekonomi.
-    """)
-
-    st.metric("Total Tahun", df["tahun"].nunique())
-    st.metric("Rata-rata Kunjungan", int(df["produksi"].mean()))
-    st.metric("Total Kunjungan", int(df["produksi"].sum()))
 
 # =========================
 # DATA
 # =========================
 elif menu == "Data":
 
-    st.title("📄 Dataset Babakan Siliwangi")
+    st.subheader("📄 Dataset")
 
     st.dataframe(df, use_container_width=True)
-
-    st.download_button(
-        "Download CSV",
-        df.to_csv(index=False),
-        file_name="babakan_siliwangi.csv",
-        mime="text/csv"
-    )
 
 # =========================
 # VISUALISASI
 # =========================
 elif menu == "Visualisasi":
 
-    st.title("📊 Tren Kunjungan")
+    st.subheader("📊 Grafik Kunjungan")
 
     fig = px.line(
         df,
@@ -154,7 +126,7 @@ elif menu == "Visualisasi":
 # =========================
 elif menu == "Prediksi":
 
-    st.title("🔮 Prediksi Kunjungan")
+    st.subheader("🔮 Prediksi Kunjungan")
 
     X = df[["tahun"]]
     y = df["produksi"]
@@ -162,27 +134,27 @@ elif menu == "Prediksi":
     model = LinearRegression()
     model.fit(X, y)
 
-    tahun_pred = st.number_input(
+    tahun = st.number_input(
         "Masukkan Tahun",
         min_value=int(df["tahun"].max()),
         value=int(df["tahun"].max() + 1)
     )
 
-    pred = model.predict([[tahun_pred]])[0]
+    pred = model.predict([[tahun]])[0]
 
-    st.metric("Prediksi Kunjungan", f"{pred:,.0f}")
+    st.success(f"Prediksi Kunjungan: {int(pred):,}")
 
-    df_pred = pd.DataFrame({
-        "tahun": list(df["tahun"]) + [tahun_pred],
+    hasil = pd.DataFrame({
+        "tahun": list(df["tahun"]) + [tahun],
         "produksi": list(df["produksi"]) + [pred]
     })
 
     fig = px.line(
-        df_pred,
+        hasil,
         x="tahun",
         y="produksi",
         markers=True,
-        title="Prediksi Kunjungan"
+        title="Prediksi Tren Kunjungan"
     )
 
     st.plotly_chart(fig, use_container_width=True)
