@@ -13,26 +13,32 @@ st.set_page_config(
     layout="wide"
 )
 
+# Custom CSS Dark Mode & Vertikal Pendek agar anti-cut-off
 st.markdown("""
 <style>
-    .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
-    h1, h2, h3 { font-family: 'Inter', sans-serif; color: #1b5e20; }
+    .block-container { padding: 2rem 4rem; background-color: #0e1117; }
+    h1, h2, h3 { font-family: 'Inter', sans-serif; color: #4caf50; }
     .banner {
-        background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        background: linear-gradient(135deg, #1b5e20, #0d3c12);
         color: white; padding: 35px; border-radius: 20px; margin-bottom: 30px;
+        border: 1px solid #2e7d32;
     }
     .metric-card {
-        background: white; border: 1px solid #e0e0e0; border-radius: 15px;
-        padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        background: #1a1c23; border: 1px solid #2e7d32; border-radius: 15px;
+        padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
-    .metric-title { font-size: 13px; color: #666; text-transform: uppercase; font-weight: bold; }
-    .metric-value { font-size: 28px; font-weight: 700; color: #2e7d32; margin-top: 5px; }
+    .metric-title { font-size: 13px; color: #a5d6a7; text-transform: uppercase; font-weight: bold; }
+    .metric-value { font-size: 28px; font-weight: 700; color: #81c784; margin-top: 5px; }
     .info-card {
-        background-color: #f1f8e9 !important; border-left: 5px solid #4caf50;
-        padding: 20px; border-radius: 10px; margin-bottom: 20px; color: #1b5e20 !important;
+        background-color: #142116 !important; border-left: 5px solid #4caf50;
+        padding: 20px; border-radius: 10px; margin-bottom: 20px; 
+        color: #e8f5e9 !important; border-top: 1px solid #1b5e20;
+        border-right: 1px solid #1b5e20; border-bottom: 1px solid #1b5e20;
     }
-    .info-card h4 { color: #1b5e20 !important; margin-top: 0; }
-    .info-card p, .info-card ul { color: #2e7d32 !important; }
+    .info-card h4 { color: #81c784 !important; margin-top: 0; }
+    .info-card p, .info-card ul { color: #c8e6c9 !important; }
+    /* Menyelaraskan teks standar Streamlit di dalam info-card */
+    .info-card stMarkdown, .info-card p { color: #c8e6c9 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -116,7 +122,7 @@ if menu == "🏠 Home":
         status_hutan = df_profil.loc[df_profil['Parameter'] == 'Status', 'Nilai'].values[0]
         
         st.markdown('<div class="info-card"><h4>🌿 Deskripsi Kawasan</h4>', unsafe_allow_html=True)
-        st.write(f"Babakan Siliwangi adalah **{jenis_hutan}** di Kota Bandung dengan status **{status_hutan}**. Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat perkotaan.")
+        st.markdown(f"Babakan Siliwangi adalah **{jenis_hutan}** di Kota Bandung dengan status **{status_hutan}**. Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat perkotaan.")
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col_b:
@@ -126,10 +132,10 @@ if menu == "🏠 Home":
         vegetasi = df_profil.loc[df_profil['Parameter'] == 'Dominan Vegetasi', 'Nilai'].values[0]
         
         st.markdown('<div class="info-card"><h4>📑 Parameter Lingkungan</h4>', unsafe_allow_html=True)
-        st.write(f"- **Ketinggian:** {ketinggian} mdpl")
-        st.write(f"- **Curah Hujan:** {curah_hujan} mm/tahun")
-        st.write(f"- **Suhu Rata-rata:** {suhu}°C")
-        st.write(f"- **Vegetasi Dominan:** {vegetasi}")
+        st.markdown(f"- **Ketinggian:** {ketinggian} mdpl")
+        st.markdown(f"- **Curah Hujan:** {curah_hujan} mm/tahun")
+        st.markdown(f"- **Suhu Rata-rata:** {suhu}°C")
+        st.markdown(f"- **Vegetasi Dominan:** {vegetasi}")
         st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
@@ -153,13 +159,14 @@ elif menu == "📊 Dashboard Profil":
     c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown("### Komposisi Tata Guna Lahan")
-        # Ditulis vertikal pendek tanpa spasi indentasi berlebih ke kanan
         fig_pie = px.pie(
         df_veg,
         values='Persentase',
         names='Kategori',
         color_discrete_sequence=px.colors.sequential.Greens_r
         )
+        # Menyesuaikan chart ke tema gelap
+        fig_pie.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig_pie, use_container_width=True)
     
     with c2:
@@ -186,21 +193,19 @@ elif menu == "📈 Analisis Ekonomi":
     kolom_x = "tahun" if "tahun" in df_trend.columns else "Tahun"
     kolom_visitor = "pengunjung" if "pengunjung" in df_trend.columns else "Pengunjung"
 
-    # Perbaikan total pada grafik garis (Line Chart) agar tidak terpotong
     fig_eco = px.line(
     df_trend,
     x=kolom_x,
     y=kolom_y,
     title="Perbandingan Jasa Lingkungan vs Biaya",
     markers=True,
-    color_discrete_sequence=["#2e7d32", "#e53935"]
+    color_discrete_sequence=["#81c784", "#e53935"]
     )
-    fig_eco.update_layout(yaxis_title="Rupiah", hovermode="x unified")
+    fig_eco.update_layout(template="plotly_dark", yaxis_title="Rupiah", hovermode="x unified", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig_eco, use_container_width=True)
     
     st.write("---")
     
-    # Perbaikan total pada grafik batang (Bar Chart) agar tidak terpotong
     fig_visitor = px.bar(
     df_trend,
     x=kolom_x,
@@ -209,11 +214,12 @@ elif menu == "📈 Analisis Ekonomi":
     color=kolom_visitor,
     color_continuous_scale="Greens"
     )
+    fig_visitor.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig_visitor, use_container_width=True)
 
     ta = "".join([
-        '<div class="card" style="background: white; padding: 15px; border-radius: 10px; ',
-        'border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">💡 ',
+        '<div class="card" style="background: #1a1c23; padding: 15px; border-radius: 10px; ',
+        'border-top: 4px solid #4caf50; box-shadow: 0 2px 8px rgba(0,0,0,0.5); color: #c8e6c9;">💡 ',
         '<b>Analisis:</b> Berdasarkan data historis, Nilai Ekonomi Lingkungan jauh melampaui ',
         'Biaya Pengelolaan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan ',
         'jasa lingkungan bagi publik Kota Bandung.</div>'
