@@ -9,15 +9,3 @@ employees,295,person,2024,Estimasi tenaga kerja
 annual_resin_production_ton,5450,ton/year,2024,Produksi getah pinus
 annual_log_production_m3,24800,m3/year,2024,Produksi kayu
 carbon_stock,1775000,ton CO2e,2024,Estimasi stok karbon
-2. Nama File: Data kph sumedang^.xlsx - Profil Hutan KPH Sumedang.csv
-Cuplikan kode
-ID,Variabel,Nilai,Satuan,Tahun,Keterangan
-1,Nama kawasan,KPH Sumedang,-,2024,Kesatuan Pemangkuan Hutan
-2,Lokasi administratif,"Sumedang, Jawa Barat",-,2024,Wilayah kerja
-3,Luas hutan,31850,ha,2024,Hutan produksi
-4,Jenis hutan,Hutan Produksi,-,2024,Produksi pinus
-5,Kelas perusahaan,Pinus,-,2024,KP Pinus
-6,Jenis pohon dominan,Pinus merkusii,-,2024,Komoditas utama
-7,Jumlah BKPH,9,unit,2024,Estimasi wilayah kerja
-8,Jumlah RPH,32,unit,2024,Resort Pemangkuan Hutan
-9,Pengelola,Perhutani,-,2024,BUMN Kehutanan
