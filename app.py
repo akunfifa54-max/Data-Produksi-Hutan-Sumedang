@@ -1,11 +1,10 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import pydeck as pdk
 import os
 
 # ==========================================
-# 1. CONFIG & THEME REFRESH
+# 1. KONFIGURASI HALAMAN
 # ==========================================
 st.set_page_config(
     page_title="Babakan Siliwangi Eco-Valuation",
@@ -13,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS untuk gaya visual anti-potong baris otomatis di Streamlit
+# Custom CSS untuk gaya visual yang bersih, modern, dan aman dari error terpotong
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -38,7 +37,6 @@ st.markdown("""
 # ==========================================
 # 2. LOAD DATA DARI GITHUB CSV
 # ==========================================
-# Definisikan nama file lokal di GitHub
 files = {
     "ringkasan": "df_ringkasan.csv",
     "profil": "df_profil.csv",
@@ -47,13 +45,11 @@ files = {
     "trend": "df_trend.csv"
 }
 
-# Fungsi pembaca aman (Mendukung lokal repositori & fallback URL jika diperlukan)
 def load_csv_data(file_name):
     if os.path.exists(file_name):
         return pd.read_csv(file_name)
     else:
-        # Fallback seandainya path bermasalah di beberapa container deployment
-        st.error(f"File data '{file_name}' tidak ditemukan di repositori GitHub Anda!")
+        st.error(f"File data '{file_name}' tidak ditemukan di repositori GitHub Anda! Pastikan file CSV sudah diunggah.")
         st.stop()
 
 df_ringkasan = load_csv_data(files["ringkasan"])
@@ -69,22 +65,22 @@ try:
     total_valuasi = df_ringkasan.loc[df_ringkasan['Variabel'] == 'Nilai Ekonomi Lingkungan', 'Nilai'].values[0]
     serapan_karbon = df_jaling.loc[df_jaling['Indikator'].str.contains('Serapan Karbon'), 'Nilai'].values[0]
 except Exception as e:
-    st.error("Gagal memproses struktur kolom data CSV. Pastikan isi file sesuai format baksil.")
+    st.error("Gagal memproses struktur data CSV. Pastikan nama kolom dan isinya sudah benar.")
     st.stop()
 
 # ==========================================
-# 3. SIDEBAR NAVIGATION
+# 3. SIDEBAR NAVIGATION (Sederhana Tanpa Peta)
 # ==========================================
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616561.png", width=80)
 st.sidebar.markdown("### **Navigasi Panel**")
 menu = st.sidebar.radio(
     "Pilih Halaman:",
-    ["🏠 Home", "📊 Dashboard Profil", "🗺️ Pemetaan Spasial", "📈 Analisis Ekonomi"],
+    ["🏠 Home", "📊 Dashboard Profil", "📈 Analisis Ekonomi"],
     label_visibility="collapsed"
 )
 
 # ==========================================
-# MENU 1: HOME (Judul & Identitas)
+# MENU 1: HOME (Judul & Identitas Kampus)
 # ==========================================
 if menu == "🏠 Home":
     st.markdown("""
@@ -111,7 +107,7 @@ if menu == "🏠 Home":
         <div class="info-card">
             <h4>🌿 Deskripsi Kawasan</h4>
             <p>Babakan Siliwangi (Baksil) adalah <b>{jenis_hutan}</b> di Kota Bandung dengan status <b>{status_hutan}</b>. 
-            Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat.</p>
+            Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat ekosistem perkotaan.</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -163,25 +159,7 @@ elif menu == "📊 Dashboard Profil":
         st.table(df_veg)
 
 # ==========================================
-# MENU 3: PEMETAAN SPASIAL
-# ==========================================
-elif menu == "🗺️ Pemetaan Spasial":
-    st.subheader("🗺️ Geospasial Babakan Siliwangi")
-    st.write("Lokasi: Bandung, Jawa Barat")
-    
-    map_data = pd.DataFrame({"lat": [-6.8895], "lon": [107.6107]})
-
-    st.pydeck_chart(pdk.Deck(
-        map_style="mapbox://styles/mapbox/satellite-v9",
-        initial_view_state=pdk.ViewState(latitude=-6.8895, longitude=107.6107, zoom=16, pitch=40),
-        layers=[
-            pdk.Layer("ScatterplotLayer", data=map_data, get_position='[lon, lat]', 
-                      get_color='[200, 30, 0, 160]', get_radius=100)
-        ],
-    ))
-
-# ==========================================
-# MENU 4: ANALISIS EKONOMI
+# MENU 3: ANALISIS EKONOMI
 # ==========================================
 elif menu == "📈 Analisis Ekonomi":
     st.subheader("📈 Tren Nilai Ekonomi vs Biaya Pengelolaan")
@@ -200,12 +178,4 @@ elif menu == "📈 Analisis Ekonomi":
     fig_visitor = px.bar(df_trend, x="Tahun", y="Pengunjung", 
                          title="Tren Pertumbuhan Pengunjung Tahunan",
                          color="Pengunjung", color_continuous_scale="Greens")
-    st.plotly_chart(fig_visitor, use_container_width=True)
-
-    st.markdown("""
-    <div class="card" style="background: white; padding: 15px; border-radius: 10px; border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-        💡 <b>Analisis:</b> Berdasarkan data historis hingga tahun target, Nilai Ekonomi Lingkungan jauh melampaui 
-        Biaya Pengelolaan operasional kawasan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan 
-        jasa lingkungan yang sangat menguntungkan bagi ekonomi publik serta masyarakat Kota Bandung.
-    </div>
-    """, unsafe_allow_html=True)
+    st.plotly_chart(
