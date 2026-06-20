@@ -13,7 +13,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS ditulis vertikal pendek agar tidak terpotong
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -116,7 +115,6 @@ if menu == "🏠 Home":
         jenis_hutan = df_profil.loc[df_profil['Parameter'] == 'Jenis Hutan', 'Nilai'].values[0]
         status_hutan = df_profil.loc[df_profil['Parameter'] == 'Status', 'Nilai'].values[0]
         
-        # Menggunakan struktur HTML murni yang kokoh tanpa f-string dinamis di dalam wadah kelas CSS
         st.markdown('<div class="info-card"><h4>🌿 Deskripsi Kawasan</h4>', unsafe_allow_html=True)
         st.write(f"Babakan Siliwangi adalah **{jenis_hutan}** di Kota Bandung dengan status **{status_hutan}**. Kawasan ini berfungsi sebagai paru-paru kota sekaligus ruang terbuka hijau primer bagi masyarakat perkotaan.")
         st.markdown('</div>', unsafe_allow_html=True)
@@ -155,11 +153,12 @@ elif menu == "📊 Dashboard Profil":
     c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown("### Komposisi Tata Guna Lahan")
+        # Ditulis vertikal pendek tanpa spasi indentasi berlebih ke kanan
         fig_pie = px.pie(
-            df_veg, 
-            values='Persentase', 
-            names='Kategori', 
-            color_discrete_sequence=px.colors.sequential.Greens_r
+        df_veg,
+        values='Persentase',
+        names='Kategori',
+        color_discrete_sequence=px.colors.sequential.Greens_r
         )
         st.plotly_chart(fig_pie, use_container_width=True)
     
@@ -187,8 +186,36 @@ elif menu == "📈 Analisis Ekonomi":
     kolom_x = "tahun" if "tahun" in df_trend.columns else "Tahun"
     kolom_visitor = "pengunjung" if "pengunjung" in df_trend.columns else "Pengunjung"
 
+    # Perbaikan total pada grafik garis (Line Chart) agar tidak terpotong
     fig_eco = px.line(
-        df_trend, 
-        x=kolom_x, 
-        y=kolom_y,
-        title="Perbandingan Nilai Jasa Lingkungan vs Biaya Operasional",
+    df_trend,
+    x=kolom_x,
+    y=kolom_y,
+    title="Perbandingan Jasa Lingkungan vs Biaya",
+    markers=True,
+    color_discrete_sequence=["#2e7d32", "#e53935"]
+    )
+    fig_eco.update_layout(yaxis_title="Rupiah", hovermode="x unified")
+    st.plotly_chart(fig_eco, use_container_width=True)
+    
+    st.write("---")
+    
+    # Perbaikan total pada grafik batang (Bar Chart) agar tidak terpotong
+    fig_visitor = px.bar(
+    df_trend,
+    x=kolom_x,
+    y=kolom_visitor,
+    title="Tren Pertumbuhan Pengunjung Tahunan",
+    color=kolom_visitor,
+    color_continuous_scale="Greens"
+    )
+    st.plotly_chart(fig_visitor, use_container_width=True)
+
+    ta = "".join([
+        '<div class="card" style="background: white; padding: 15px; border-radius: 10px; ',
+        'border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">💡 ',
+        '<b>Analisis:</b> Berdasarkan data historis, Nilai Ekonomi Lingkungan jauh melampaui ',
+        'Biaya Pengelolaan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan ',
+        'jasa lingkungan bagi publik Kota Bandung.</div>'
+    ])
+    st.markdown(ta, unsafe_allow_html=True)
