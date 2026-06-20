@@ -52,11 +52,15 @@ df_produksi = load_data("Produksi Hasil Hutan.csv")
 
 # Ekstraksi Data Utama untuk Metrik
 try:
-    luas_hutan = df_rangkuman.loc[df_rangkuman['variable'] == 'forest_area_ha', 'value'].values[0]
-    prod_getah = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_resin_production_ton', 'value'].values[0]
-    prod_kayu = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_log_production_m3', 'value'].values[0]
+    luas_hutan_val = df_rangkuman.loc[df_rangkuman['variable'] == 'forest_area_ha', 'value'].values[0]
+    prod_getah_val = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_resin_production_ton', 'value'].values[0]
+    prod_kayu_val = df_rangkuman.loc[df_rangkuman['variable'] == 'annual_log_production_m3', 'value'].values[0]
+    
+    # Ambil nilai angka murni untuk perhitungan simulasi slider
+    clean_prod_getah = float(str(prod_getah_val).replace(',', ''))
 except:
-    luas_hutan, prod_getah, prod_kayu = "31,850", "5,450", "24,800"
+    luas_hutan_val, prod_getah_val, prod_kayu_val = "31,850", "5,450", "24,800"
+    clean_prod_getah = 5450.0
 
 # ==========================================
 # 3. SIDEBAR NAVIGATION & LOGO
@@ -119,11 +123,10 @@ elif menu == "📦 Produksi Hasil Hutan":
     st.plotly_chart(fig_prod, use_container_width=True)
     st.dataframe(df_produksi, use_container_width=True, hide_index=True)
 
-# MENU 4: ANALISIS EKONOMI (DENGAN TOTAL ECONOMIC VALUE & TRADE-OFF)
+# MENU 4: ANALISIS EKONOMI
 elif menu == "💰 Analisis Ekonomi":
     st.header("💰 Valuasi Ekonomi & Analisis Kelayakan Kelompok 6")
     
-    # Membaca metrik finansial
     try:
         df_finansial['Variabel'] = df_finansial['Variabel'].str.strip()
         npv = df_finansial.loc[df_finansial['Variabel'] == 'NPV pinus', 'Nilai'].values[0]
@@ -134,17 +137,13 @@ elif menu == "💰 Analisis Ekonomi":
     except:
         npv, irr, bcr, tev_formatted = "198,500,000", "15.8", "2.85", "Rp 66,100,000,000"
 
-    # Baris Pertama: Indikator Kelayakan Finansial per Ha
     c1, c2, c3 = st.columns(3)
     c1.markdown(f'<div class="metric-card"><b>NPV Pinus</b><br><span class="metric-value">Rp {npv} / Ha</span></div>', unsafe_allow_html=True)
     c2.markdown(f'<div class="metric-card"><b>IRR Pinus</b><br><span class="metric-value">{irr}%</span></div>', unsafe_allow_html=True)
     c3.markdown(f'<div class="metric-card"><b>Benefit-Cost Ratio (BCR)</b><br><span class="metric-value">{bcr} x</span></div>', unsafe_allow_html=True)
     
     st.write("---")
-    
-    # Tambahan Sesuai Permintaan: TOTAL ECONOMIC VALUE (TEV)
     st.subheader("🌲 Total Economic Value (TEV) KPH Sumedang")
-    st.write("Pendekatan TEV mengintegrasikan seluruh nilai guna langsung (getah & kayu) dengan nilai proteksi lingkungan (stok karbon).")
     
     col_tev1, col_tev2 = st.columns([1, 1])
     with col_tev1:
@@ -160,29 +159,23 @@ elif menu == "💰 Analisis Ekonomi":
         st.plotly_chart(fig_pie, use_container_width=True)
 
     st.write("---")
-    
-    # Tambahan Sesuai Permintaan: ANALISIS TRADE-OFF
     st.subheader("⚖️ Analisis Trade-Off: Produksi vs Konservasi Lingkungan")
-    
-    st.markdown("""
-    Dalam manajemen ekonomi sumber daya alam di KPH Sumedang, terdapat titik keseimbangan (*trade-off*) kritis yang harus dijaga antara dua fungsi utama:
-    """)
     
     col_to1, col_to2 = st.columns(2)
     with col_to1:
         st.markdown("""
         #### 📈 Eksploitasi Sisi Ekonomi (Produksi)
         * **Tindakan:** Memaksimalkan penderapan getah pinus dan mempercepat daur tebang kayu log untuk mengejar target profit finansial perusahaan.
-        * **Dampak Negatif:** Jika berlebihan (*over-exploitation*), struktur mekanis batang pohon pinus akan melemah, menurunkan angka harapan hidup pohon, serta memperkecil kerapatan tajuk hutan.
+        * **Dampak:** Menurunkan kekuatan mekanis batang jika penderapan terlalu ekstrem.
         """)
     with col_to2:
         st.markdown("""
         #### 🌍 Retensi Sisi Ekologi (Konservasi)
-        * **Tindakan:** Mempertahankan tegakan pinus tetap utuh, menjaga kerapatan vegetasi, dan membiarkan siklus alami untuk penyerapan karbon optimal.
-        * **Dampak Negatif:** Menahan atau mengurangi intensitas penebangan kayu berarti menurunkan arus kas masuk (*cash flow*) bruto instan dari sektor perkayuan komersial.
+        * **Tindakan:** Membiarkan pohon utuh untuk asimilasi karbon maksimal.
+        * **Dampak:** Mengurangi arus kas instan (*cash flow*) dari penjualan kayu komersial.
         """)
         
-    st.markdown('<div class="tradeoff-box">💡 <b>Solusi Kebijakan Sumber Daya:</b> Nilai BCR sebesar <b>' + str(bcr) + '</b> membuktikan bahwa strategi saat ini sudah tepat. KPH Sumedang berhasil menempatkan penderapan getah pinus (Hasil Hutan Bukan Kayu/HHBK) sebagai roda utama ekonomi (70%), sehingga pohon tidak perlu ditebang dini. Hal ini meminimalkan trade-off negatif karena fungsi penyerapan karbon lingkungan tetap berjalan beriringan dengan perolehan keuntungan finansial.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="tradeoff-box">💡 <b>Solusi Kebijakan Sumber Daya:</b> Nilai BCR sebesar <b>' + str(bcr) + '</b> membuktikan bahwa strategi saat ini sudah tepat. KPH Sumedang berhasil menempatkan penderapan getah pinus sebagai roda utama ekonomi (70%), sehingga fungsi penyerapan karbon lingkungan tetap berjalan beriringan dengan keuntungan finansial.</div>', unsafe_allow_html=True)
 
 # MENU 5: MASTER DATA
 elif menu == "🗂️ Master Data":
@@ -192,14 +185,52 @@ elif menu == "🗂️ Master Data":
     with tab2: st.dataframe(df_finansial, use_container_width=True)
     with tab3: st.dataframe(df_produksi, use_container_width=True)
 
-# MENU 6: PARAMETER SIMULASI
+# MENU 6: PARAMETER SIMULASI (DENGAN SLIDER FITUR GESER KELOMPOK 6)
 elif menu == "📊 Parameter Simulasi":
-    st.header("Simulasi Skenario Harga")
-    st.write("Estimasi pendapatan kotor (bruto) berdasarkan fluktuasi harga pasar.")
+    st.header("📊 Simulasi Interaktif Harga Komoditas Getah Pinus")
+    st.write("Gunakan tombol geser di bawah ini untuk melihat simulasi dampak perubahan harga getah di pasar terhadap pendapatan bruto daerah.")
+
+    # 1. Menambahkan Fitur Slider (Bisa digeser-geser)
+    harga_slider = st.slider(
+        label="Geser untuk Menyesuaikan Harga Getah Pinus (Rp per Kg):",
+        min_value=5000,
+        max_value=25000,
+        value=11500,  # Harga awal (default)
+        step=500
+    )
     
-    df_bruto = df_harga[df_harga['Variabel'].str.contains('Nilai bruto', na=False)]
-    fig_bruto = px.bar(df_bruto, x='Variabel', y='Nilai', color='Nilai', title="Simulasi Pendapatan Tahunan (Rupiah)", color_continuous_scale="Darkmint")
-    st.plotly_chart(fig_bruto, use_container_width=True)
+    # 2. Rumus Matematika Simulasi Otomatis
+    # Produksi dalam Ton diubah ke Kg dikali harga dari slider
+    pendapatan_simulasi = clean_prod_getah * 1000 * harga_slider
+    
+    st.write("---")
+    
+    # Menampilkan Hasil Pergeseran secara Real-Time via Info Box & Metric
+    col_s1, col_s2 = st.columns([1, 2])
+    with col_s1:
+        st.info("💡 **Hasil Simulasi Live:**")
+        st.metric(label="Harga Getah Terpilih", value=f"Rp {harga_slider:,} / Kg")
+        st.metric(label="Estimasi Pendapatan Bruto Getah / Tahun", value=f"Rp {int(pendapatan_simulasi):,}")
+    
+    with col_s2:
+        # Membuat Dataframe Bayangan untuk memplot Grafik Batang secara Dinamis
+        simulasi_data = pd.DataFrame({
+            'Skenario': ['Batas Minimum Data', 'Hasil Geser Anda (Live)', 'Batas Maksimum Data'],
+            'Nilai Pendapatan Bruto (Rp)': [40875000000, pendapatan_simulasi, 81750000000]
+        })
+        
+        fig_sim = px.bar(
+            simulasi_data, 
+            x='Skenario', 
+            y='Nilai Pendapatan Bruto (Rp)', 
+            color='Skenario',
+            color_discrete_map={'Hasil Geser Anda (Live)': '#ff9800', 'Batas Minimum Data': '#a5d6a7', 'Batas Maksimum Data': '#2e7d32'},
+            title="Perbandingan Posisi Pendapatan Real-Time"
+        )
+        st.plotly_chart(fig_sim, use_container_width=True)
+
+    st.write("---")
+    st.markdown("#### Tabel Acuan Statis (Data Asli CSV):")
     st.table(df_harga[['Variabel', 'Nilai', 'Satuan']])
 
 # MENU 7: DASHBOARD SUMMARY
@@ -207,9 +238,9 @@ elif menu == "📉 Dashboard Summary":
     st.header("Ringkasan Eksekutif")
     
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Luas Hutan (Ha)", luas_hutan)
-    col2.metric("Produksi Getah (Ton)", prod_getah)
-    col3.metric("Produksi Kayu (m³)", prod_kayu)
+    col1.metric("Luas Hutan (Ha)", luas_hutan_val)
+    col2.metric("Produksi Getah (Ton)", prod_getah_val)
+    col3.metric("Produksi Kayu (m³)", prod_kayu_val)
     col4.metric("Kelayakan Proyek", "LAYAK (BCR > 1)")
     
     st.write("---")
