@@ -90,7 +90,7 @@ menu = st.sidebar.radio(
 
 # MENU 1: BERANDA
 if menu == "🏠 Beranda":
-    st.markdown('<div class="banner"><h1>ashboard KPH Sumedang</h1><p>Analisis Ekonomi Sumber Daya Alam & Lingkungan - PBL Kelompok 6</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="banner"><h1>Dashboard KPH Sumedang</h1><p>Analisis Ekonomi Sumber Daya Alam & Lingkungan - PBL Kelompok 6</p></div>', unsafe_allow_html=True)
     st.info("Dashboard ini menyajikan data hasil hutan kayu dan bukan kayu (Getah Pinus) beserta valuasi ekonomi dan kelayakan finansial pengelolaan hutan di wilayah Sumedang.")
     
     st.subheader("Identitas Kelompok")
