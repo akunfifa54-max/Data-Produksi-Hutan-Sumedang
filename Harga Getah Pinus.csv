@@ -1,0 +1,7 @@
+ID,Variabel,Nilai,Satuan,Tahun,Keterangan
+1,Harga getah minimum,9000000,Rp/ton,2024,Kisaran bawah
+2,Harga getah maximum,12000000,Rp/ton,2024,Kisaran atas
+3,Harga referensi tengah,10500000,Rp/ton,2024,Simulasi aplikasi
+4,Nilai bruto tahunan minimum,49050000000,Rp/tahun,Derived,5450 x 9000000
+5,Nilai bruto tahunan tengah,57225000000,Rp/tahun,Derived,5450 x 10500000
+6,Nilai bruto tahunan maksimum,65400000000,Rp/tahun,Derived,5450 x 12000000
