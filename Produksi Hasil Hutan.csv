@@ -1,0 +1,7 @@
+ID,Variabel,Nilai,Satuan,Tahun,Keterangan
+1,Produksi getah pinus,5450,ton/tahun,2024,Produksi utama
+2,Produksi kayu pinus,24800,m3/tahun,2024,Produksi kayu
+3,Produktivitas getah,0.171,ton/ha,2024,Rata-rata
+4,Produktivitas kayu,0.779,m3/ha,2024,Rata-rata
+5,Kontribusi getah,70,%,2024,Pendapatan utama
+6,Kontribusi kayu,30,%,2024,Pendapatan tambahan
