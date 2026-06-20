@@ -1,16 +1,8 @@
-tahun,jenis_kayu,produksi
-2018,SENGON,120000
-2019,SENGON,135000
-2020,SENGON,128000
-2021,SENGON,145000
-2022,SENGON,152000
-2018,PINUS,85000
-2019,PINUS,92000
-2020,PINUS,88000
-2021,PINUS,97000
-2022,PINUS,101000
-2018,JATI,65000
-2019,JATI,70000
-2020,JATI,68000
-2021,JATI,73000
-2022,JATI,79000
+tahun,jenis_lokasi,luas_ha,status_kawasan,kunjungan_estimasi,catatan,sumber
+2018,Babakan Siliwangi,3.8,World City Forest,170000,Stabil sebagai RTH Kota Bandung,UNEP 2011 & IPB Repository
+2019,Babakan Siliwangi,3.8,World City Forest,185000,Peningkatan aktivitas wisata,Analisis RTH Bandung (IPB)
+2020,Babakan Siliwangi,3.8,World City Forest,80000,Penurunan akibat pandemi COVID-19,Tren wisata Bandung (BPS/berita pariwisata)
+2021,Babakan Siliwangi,3.8,World City Forest,150000,Pemulihan kunjungan pasca pandemi,Dinas Pariwisata Kota Bandung
+2022,Babakan Siliwangi,3.8,World City Forest,200000,Peningkatan wisata alam kota Bandung,Kompas & Radar Bandung
+2023,Babakan Siliwangi,3.8,World City Forest,220000,Revitalisasi Forest Walk,Urban Nature Atlas
+2024,Babakan Siliwangi,3.8,World City Forest,240000,Tingkat kunjungan meningkat,Trend wisata kota Bandung
