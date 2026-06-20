@@ -113,13 +113,12 @@ if os.path.exists(logo_path):
 st.sidebar.markdown("<h3 style='text-align: center; margin-top:0; font-size:18px; color:#1b5e20;'>PBL KELOMPOK 6</h3>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-# MENU YANG BISA DIPILIH & DIGANTI SECARA INTERAKTIF DI SIDEBAR
 st.sidebar.markdown("📁 **Pilih Menu Analisis:**")
 menu = st.sidebar.selectbox(
     "Navigasi Halaman:",
     [
         "🏠 Beranda Utama", 
-        "📄 Profil & Wilayah", 
+        "📄 Profil, Vegetasi & Ekosistem", 
         "📦 Matriks Produksi Hutan", 
         "💰 Valuasi TEV & Kelayakan",
         "⚖️ Parameter Kebijakan Trade-Off",
@@ -170,22 +169,82 @@ if menu == "🏠 Beranda Utama":
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# MODUL 2: PROFIL & WILAYAH
+# MODUL 2: PROFIL, VEGETASI & EKOSISTEM (UPGRADED PERFECT)
 # ==========================================
-elif menu == "📄 Profil & Wilayah":
-    st.header("📄 Karakteristik Geografis & Batas Administratif")
+elif menu == "📄 Profil, Vegetasi & Ekosistem":
+    st.header("📄 Karakteristik Biofisik, Status Hukum & Kekayaan Hayati")
+    st.write("Analisis spasial wilayah, status fungsi kawasan hutan, serta keanekaragaman flora dan fauna di KPH Sumedang.")
     
-    col_tab, col_box = st.columns([4, 3])
-    with col_tab:
-        st.markdown("##### Tabel Data Wilayah")
-        st.dataframe(df_profil, use_container_width=True, hide_index=True)
-    with col_box:
-        st.markdown("<div class='solution-box' style='margin-top:0;'>", unsafe_allow_html=True)
-        st.markdown("##### 🌲 Deskripsi Tata Kawasan")
+    # Menampilkan Tab Internal yang Bisa Digeser untuk Memisahkan Data Teknis & Penjelasan Naratif
+    tab_geo, tab_status, tab_biodiversitas = st.tabs([
+        "🗺️ Distribusi Geografis", 
+        "⚖️ Status Fungsi Kawasan Hutan", 
+        "🦅 Kekayaan Flora & Fauna (Biodiversitas)"
+    ])
+    
+    with tab_geo:
+        col_tab, col_box = st.columns([4, 3])
+        with col_tab:
+            st.markdown("##### Luas Wilayah Administrasi Per Kecamatan di KPH Sumedang")
+            st.dataframe(df_profil, use_container_width=True, hide_index=True)
+        with col_box:
+            st.markdown("<div class='solution-box' style='margin-top:0;'>", unsafe_allow_html=True)
+            st.markdown("##### 📍 Kondisi Geografis Lokasi")
+            st.write("""
+            Secara geografis, wilayah **KPH Sumedang** membentang di Kabupaten Sumedang, Jawa Barat, dengan lanskap yang didominasi oleh topografi perbukitan bergelombang hingga pegunungan curam. 
+            
+            Kondisi tanah vulkanik yang subur didukung oleh curah hujan tropis yang tinggi menjadikan kawasan ini sebagai habitat yang sangat ideal bagi pertumbuhan tegakan vegetasi komoditas berkayu, khususnya pohon **Pinus (*Pinus merkusii*)**.
+            """)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    with tab_status:
+        st.markdown("### ⚖️ Klasifikasi Status Hukum Kawasan Hutan")
+        st.write("Apakah wilayah KPH Sumedang merupakan Hutan Lindung, Hutan Raya, atau Hutan Produksi?")
+        
+        st.markdown("""
+        Berdasarkan tata guna hutan kesepakatan dan regulasi Perum Perhutani Divisi Regional Jawa Barat dan Banten, status hukum wilayah kerja KPH Sumedang secara mayoritas diklasifikasikan sebagai **HUTAN PRODUKSI (HP)**, dengan beberapa zonasi khusus sebagai **Hutan Lindung (HL)** untuk menjaga hulu daerah aliran sungai (DAS). 
+        
+        Kawasan ini **bukan merupakan Hutan Raya (Tahura)** yang peruntukannya murni untuk konservasi koleksi tumbuhan baku. 
+        """)
+        
+        st.markdown("<div class='tradeoff-box' style='background-color: #f0fdf4; border-left-color: #16a34a; color: #14532d;'>", unsafe_allow_html=True)
+        st.markdown("##### 🔗 Korelasi Status Hutan dengan Produksi Getah & Pohon Pinus")
         st.write("""
-        Wilayah kerja KPH Sumedang didominasi oleh topografi perbukitan yang ideal bagi pertumbuhan tanaman pinus.
+        Karena status hukumnya sebagai **Hutan Produksi**, KPH Sumedang memiliki legalitas resmi untuk memanen komoditas kayu log komersial. Namun, guna meminimalkan kerusakan lingkungan akibat penebangan pohon secara masif (*deforestasi*), pengelola menerapkan strategi **Hasil Hutan Bukan Kayu (HHBK)** melalui penderapan **Getah Pinus**.
+        
+        Strategi ini sangat brilian secara ekonomi sumber daya alam: **Pohon pinus tetap dibiarkan hidup tumbuh berdiri kokoh menjaga fungsi ekologis (menyerap karbon dan mencegah longsor), namun di saat bersamaan tetap mampu memproduksi getah secara periodik untuk mendatangkan profit finansial harian bagi perusahaan dan menyejahterakan masyarakat penyadap lokal.**
         """)
         st.markdown("</div>", unsafe_allow_html=True)
+
+    with tab_biodiversitas:
+        st.markdown("### 🦅 Profil Ekosistem & Kekayaan Biodiversitas Hayati")
+        st.write("Meskipun difungsikan sebagai kawasan produksi intensif Pinus merkusii, KPH Sumedang tetap menyimpan kekayaan flora dan fauna yang hidup berdampingan di dalam ekosistem hutan.")
+        
+        col_flora, col_fauna = st.columns(2)
+        
+        with col_flora:
+            st.markdown("""
+            <div class='metric-card' style='text-align: left; border-top: 4px solid #1b5e20;'>
+                <h4>🌲 Kekayaan Flora (Vegetasi)</h4>
+                <ul>
+                    <li><b>Pinus merkusii (Tegakan Utama):</b> Tanaman pokok penghasil getah komersial sekaligus penopang biomassa karbon terbesar di kawasan ini.</li>
+                    <li><b>Vegetasi Pengaya & Monokultur:</b> Di sela-sela tegakan pinus, terdapat sebaran tanaman Kaliandra, Mahoni, dan Akasia yang berfungsi sebagai tanaman sekat bakar serta menjaga kesuburan unsur hara tanah bawah.</li>
+                    <li><b>Plantae Bawah:</b> Paku-pakuan, semak belukar, dan tanaman pakan alami yang menjaga kelembaban mikro tanah hutan.</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with col_fauna:
+            st.markdown("""
+            <div class='metric-card' style='text-align: left; border-top: 4px solid #ff9800;'>
+                <h4>🦅 Kekayaan Fauna (Satwa Liar)</h4>
+                <ul>
+                    <li><b>Avifauna (Burung):</b> Menjadi rumah bagi burung Elang Jawa (Spizaetus bartelsi) yang sesekali singgah di area hulu lindung, burung Kutilang, dan Cerocokan yang berperan sebagai penyerak biji alami.</li>
+                    <li><b>Mamalia:</b> Terdapat populasi Babi Hutan (Sus scrofa), Tupai, dan beberapa jenis primata lokal seperti Monyet Ekor Panjang (Macaca fascicularis) yang mendiami area batas hutan konservasi.</li>
+                    <li><b>Reptilia & Insekta:</b> Berbagai jenis ular sanca, kadal hutan, serta koloni lebah madu liar yang memanfaatkan bunga dari tanaman pengaya (kaliandra) di sekitar tegakan pohon pinus.</li>
+                </ul>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ==========================================
 # MODUL 3: MATRIKS PRODUKSI HUTAN
@@ -232,7 +291,7 @@ elif menu == "💰 Valuasi TEV & Kelayakan":
 # MODUL 5: PARAMETER KEBIJAKAN TRADE-OFF
 # ==========================================
 elif menu == "⚖️ Parameter Kebijakan Trade-Off":
-    st.header("⚖ shrink Analisis Batas Trade-Off")
+    st.header("⚖️ Analisis Batas Trade-Off")
     
     c_l, c_r = st.columns(2)
     with c_l:
@@ -251,13 +310,12 @@ elif menu == "⚖️ Parameter Kebijakan Trade-Off":
         """, unsafe_allow_html=True)
 
 # ==========================================
-# MODUL 6: SIMULATOR & SLIDER DINAMIS (MENU GESER KOMODITAS)
+# MODUL 6: SIMULATOR & SLIDER DINAMIS
 # ==========================================
 elif menu == "📊 Simulator & Slider Dinamis":
     st.header("📊 Simulator Interaktif Kelayakan Investasi")
     st.write("Silakan geser tombol di bawah ini untuk melihat dampak perubahan harga getah secara real-time.")
 
-    # FITUR TOMBOL GESER (SLIDER)
     harga_geser = st.slider(
         "Geser untuk Menyesuaikan Harga Pasar Getah Pinus (Rp / Kg):",
         min_value=5000,
@@ -266,7 +324,6 @@ elif menu == "📊 Simulator & Slider Dinamis":
         step=500
     )
     
-    # Perhitungan Matematika Dinamis
     revenue_getah_live = prod_getah * 1000 * harga_geser
     revenue_kayu_fixed = prod_kayu * 620000 
     total_rev_live = revenue_getah_live + revenue_kayu_fixed
@@ -284,7 +341,6 @@ elif menu == "📊 Simulator & Slider Dinamis":
     with v3:
         st.metric(label="Total Estimasi Omset Bersama", value=f"Rp {int(total_rev_live):,}")
 
-    # Grafik interaktif dinamis yang ikut bergeser panjang-pendeknya
     st.write("---")
     chart_data = pd.DataFrame({
         'Komoditas Pendapatan': ['Getah Pinus (Live Bergeser)', 'Kayu Log (Statis)'],
@@ -295,24 +351,19 @@ elif menu == "📊 Simulator & Slider Dinamis":
     st.plotly_chart(fig_live_bar, use_container_width=True)
 
 # ==========================================
-# MODUL 7: TRANSPARANSI DATA CSV (DENGAN TAB YANG BISA DI-KLIK GESER)
+# MODUL 7: TRANSPARANSI DATA CSV
 # ==========================================
 elif menu == "📂 Transparansi Data CSV":
     st.header("📂 Transparansi Dataset Sumber (Audit Mode)")
-    st.write("Di bawah ini adalah menu sub-tabel yang bisa Anda **klik dan geser** untuk melihat data mentah asli:")
+    st.write("Di bawah ini adalah menu sub-tabel yang bisa Anda klik dan geser untuk melihat data mentah asli:")
 
-    # FITUR TAB YANG BISA DI-KLIK GESER DI DALAM HALAMAN
     tab1, tab2, tab3, tab4 = st.tabs(["📊 Rangkuman Indikator", "🗺️ Profil Spasial", "🍰 Struktur TEV", "💰 Skenario Harga"])
     
     with tab1:
-        st.markdown("### Data Rangkuman Umum")
         st.dataframe(df_rangkuman, use_container_width=True)
     with tab2:
-        st.markdown("### Data Kecamatan & Luas Wilayah")
         st.dataframe(df_profil, use_container_width=True)
     with tab3:
-        st.markdown("### Data Persentase Komposisi")
         st.dataframe(df_komposisi, use_container_width=True)
     with tab4:
-        st.markdown("### Data Acuan Harga Pasar")
         st.dataframe(df_harga, use_container_width=True)
