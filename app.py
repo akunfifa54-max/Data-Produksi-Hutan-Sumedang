@@ -96,19 +96,26 @@ df_produksi = safe_load_csv("Produksi Hasil Hutan.csv", {
     'Nilai': [5450, 24800]
 })
 
-# Konstanta Dasar Penelitian Kelompok 2
+# Konstanta Dasar Penelitian
 luas_total_hutan = 31850
 volume_getah_tahunan = 5450  # Ton
 volume_kayu_tahunan = 24800   # m³
 
 # ==========================================
-# 3. BRANDING LOGO & NAVIGATION
+# 3. BRANDING LOGO, SWITCHER & NAVIGATION
 # ==========================================
 logo_path = "OIP.webp"
 if os.path.exists(logo_path):
     st.sidebar.image(Image.open(logo_path), use_container_width=True)
 
-st.sidebar.markdown("<h2 style='text-align: center; margin-top:0; font-size:18px; color:#1b5e20; font-weight:700;'>PBL KELOMPOK 2</h2>", unsafe_allow_html=True)
+# SAKLAR INTERAKTIF NAMA KELOMPOK
+st.sidebar.markdown("⚙️ **Pengaturan Identitas Kelompok:**")
+nama_kelompok = st.sidebar.selectbox(
+    "Pilih Nomor Kelompok PBL:",
+    ["PBL KELOMPOK 2", "PBL KELOMPOK 6"]
+)
+
+st.sidebar.markdown(f"<h2 style='text-align: center; margin-top:5px; font-size:18px; color:#1b5e20; font-weight:700;'>{nama_kelompok}</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #64748b; font-size:12px; margin-top:-10px;'>Ekonomi Sumber Daya Alam & Lingkungan</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
@@ -131,11 +138,11 @@ menu = st.sidebar.radio(
 # MODUL 1: BERANDA KORPORAT UTAMA
 # ==========================================
 if menu == "🏠 Beranda Korporat Utama":
-    st.markdown("""
+    st.markdown(f"""
     <div class="hero-banner">
         <h1 style="color: white; margin: 0; font-size: 38px; font-weight:700; letter-spacing: -1px;">KPH SUMEDANG ECO-FOREST VALUATION</h1>
         <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.95; font-weight: 400;">
-            Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan - PBL Kelompok 2
+            Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan - {nama_kelompok}
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -151,13 +158,13 @@ if menu == "🏠 Beranda Korporat Utama":
         dapat dioptimalkan tanpa mendegradasi fungsi perlindungan lingkungan hidup (*sustainable forest management*).
         """)
         
-        st.markdown("### 👥 Identitas Peneliti Kelompok 2:")
-        st.markdown("""
+        st.markdown(f"### 👥 Identitas Peneliti {nama_kelompok}:")
+        st.markdown(f"""
         * **Mata Kuliah:** Ekonomi Sumber Daya Alam dan Lingkungan  
         * **Institusi:** Fakultas Ekonomi dan Bisnis, Universitas Islam Bandung (UNISBA)  
         * **Dosen Pengampu:** Yuhka Sundaya, S.E., M.Si.  
         
-        **Susunan Anggota Tim Kelompok 2:**
+        **Susunan Anggota Tim Peneliti:**
         1. 🧑‍💻 **Radea Rahman Dwiyana** (10090224001)
         2. 👩‍💻 **Bunga Wiati Manaki** (10090224026)
         3. 🧑‍💻 **Shidqi Alhamdani Mieftah** (10090224032)
@@ -165,7 +172,7 @@ if menu == "🏠 Beranda Korporat Utama":
     
     with col_side:
         st.markdown("<div class='metric-container' style='background-color:#f8fafc; border-top: 4px solid #1b5e20; text-align:left;'>", unsafe_allow_html=True)
-        st.markdown("#### 🎯 Core Dashboard Capabilities")
+        st.sidebar.markdown("#### 🎯 Core Dashboard Capabilities")
         st.markdown("""
         - **Valuasi TEV:** Menilai aset nyata pasar dan non-pasar (karbon).
         - **Uji Sensitivitas Interaktif:** Simulasi ketahanan kas terhadap guncangan harga pasar.
@@ -294,10 +301,10 @@ elif menu == "💰 Valuasi TEV & Ekonomi Makro":
     with col_desc:
         st.markdown("#### 🌍 Total Nilai Ekonomi Agregat Makro")
         st.metric(label="Estimasi Nilai Total Ekonomi Kawasan KPH Per Tahun", value="Rp 66,100,000,000")
-        st.write("""
+        st.write(f"""
         Melalui pemodelan Total Economic Value (TEV), kita dapat membuktikan secara matematis di hadapan dosen bahwa **Getah Pinus (HHBK) menguasai 70% total valuasi nilai ekonomi**. 
         
-        Angka ini menjadi pijakan argumen yang sangat solid bagi Kelompok 2 untuk menyatakan bahwa pembangunan ekonomi kehutanan tidak harus merusak lingkungan; pemanfaatan jasa non-kayu terbukti jauh lebih menguntungkan secara finansial jangka panjang.
+        Angka ini menjadi pijakan argumen yang sangat solid bagi {nama_kelompok} untuk menyatakan bahwa pembangunan ekonomi kehutanan tidak harus merusak lingkungan; pemanfaatan jasa non-kayu terbukti jauh lebih menguntungkan secara finansial jangka panjang.
         """)
 
 # ==========================================
@@ -325,9 +332,9 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         </div>
         """, unsafe_allow_html=True)
         
-    st.markdown("""
+    st.markdown(f"""
     <div class="info-box-success">
-        <h4>💡 Resolusi Konseptual Kelompok 2: Optimalisasi HHBK Berkelanjutan</h4>
+        <h4>💡 Resolusi Konseptual {nama_kelompok}: Optimalisasi HHBK Berkelanjutan</h4>
         <p>Berdasarkan temuan ilmiah kami, rasio kelayakan <b>BCR baseline mencapai 2.85 (di atas 1)</b>. Hal ini menunjukkan bahwa skema pemanfaatan Getah Pinus (HHBK) adalah solusi ekuilibrium terbaik. Skema ini mengizinkan kegiatan ekonomi berjalan secara optimal tanpa mengorbankan tegakan pohon pokok yang memegang peranan krusial sebagai penyerap emisi gas rumah kaca di KPH Sumedang.</p>
     </div>
     """, unsafe_allow_html=True)
