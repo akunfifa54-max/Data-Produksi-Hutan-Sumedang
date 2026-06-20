@@ -12,7 +12,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS untuk gaya visual yang bersih, modern, dan aman dari error terpotong
+# Custom CSS untuk gaya visual yang bersih dan aman dari error
 st.markdown("""
 <style>
     .block-container { padding: 2rem 4rem; background-color: #fcfdfe; }
@@ -49,7 +49,7 @@ def load_csv_data(file_name):
     if os.path.exists(file_name):
         return pd.read_csv(file_name)
     else:
-        st.error(f"File data '{file_name}' tidak ditemukan di repositori GitHub Anda! Pastikan file CSV sudah diunggah.")
+        st.error(f"File data '{file_name}' tidak ditemukan di GitHub!")
         st.stop()
 
 df_ringkasan = load_csv_data(files["ringkasan"])
@@ -65,11 +65,11 @@ try:
     total_valuasi = df_ringkasan.loc[df_ringkasan['Variabel'] == 'Nilai Ekonomi Lingkungan', 'Nilai'].values[0]
     serapan_karbon = df_jaling.loc[df_jaling['Indikator'].str.contains('Serapan Karbon'), 'Nilai'].values[0]
 except Exception as e:
-    st.error("Gagal memproses struktur data CSV. Pastikan nama kolom dan isinya sudah benar.")
+    st.error("Gagal memproses kolom data CSV. Periksa isi file Anda.")
     st.stop()
 
 # ==========================================
-# 3. SIDEBAR NAVIGATION (Sederhana Tanpa Peta)
+# 3. SIDEBAR NAVIGATION
 # ==========================================
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616561.png", width=80)
 st.sidebar.markdown("### **Navigasi Panel**")
@@ -80,7 +80,7 @@ menu = st.sidebar.radio(
 )
 
 # ==========================================
-# MENU 1: HOME (Judul & Identitas Kampus)
+# MENU 1: HOME (Judul & Identitas)
 # ==========================================
 if menu == "🏠 Home":
     st.markdown("""
@@ -150,8 +150,12 @@ elif menu == "📊 Dashboard Profil":
     c1, c2 = st.columns([1, 1])
     with c1:
         st.markdown("### Komposisi Tata Guna Lahan")
-        fig_pie = px.pie(df_veg, values='Persentase', names='Kategori', 
-                         color_discrete_sequence=px.colors.sequential.Greens_r)
+        fig_pie = px.pie(
+            df_veg, 
+            values='Persentase', 
+            names='Kategori', 
+            color_discrete_sequence=px.colors.sequential.Greens_r
+        )
         st.plotly_chart(fig_pie, use_container_width=True)
     
     with c2:
@@ -164,18 +168,35 @@ elif menu == "📊 Dashboard Profil":
 elif menu == "📈 Analisis Ekonomi":
     st.subheader("📈 Tren Nilai Ekonomi vs Biaya Pengelolaan")
     
-    fig_eco = px.line(df_trend, x="Tahun", 
-                      y=["Nilai Ekonomi (Rp)", "Biaya Pengelolaan (Rp)"],
-                      title="Perbandingan Nilai Jasa Lingkungan vs Biaya Operasional",
-                      markers=True, 
-                      color_discrete_sequence=["#2e7d32", "#e53935"])
-    
+    # Grafik 1: Perbandingan Finansial (Line Chart)
+    fig_eco = px.line(
+        df_trend, 
+        x="Tahun", 
+        y=["Nilai Ekonomi (Rp)", "Biaya Pengelolaan (Rp)"],
+        title="Perbandingan Nilai Jasa Lingkungan vs Biaya Operasional",
+        markers=True, 
+        color_discrete_sequence=["#2e7d32", "#e53935"]
+    )
     fig_eco.update_layout(yaxis_title="Rupiah (Rp)", hovermode="x unified")
     st.plotly_chart(fig_eco, use_container_width=True)
     
     st.write("---")
     
-    fig_visitor = px.bar(df_trend, x="Tahun", y="Pengunjung", 
-                         title="Tren Pertumbuhan Pengunjung Tahunan",
-                         color="Pengunjung", color_continuous_scale="Greens")
-    st.plotly_chart(
+    # Grafik 2: Tren Pengunjung (Bar Chart)
+    fig_visitor = px.bar(
+        df_trend, 
+        x="Tahun", 
+        y="Pengunjung", 
+        title="Tren Pertumbuhan Pengunjung Tahunan",
+        color="Pengunjung", 
+        color_continuous_scale="Greens"
+    )
+    st.plotly_chart(fig_visitor, use_container_width=True)
+
+    st.markdown("""
+    <div class="card" style="background: white; padding: 15px; border-radius: 10px; border-top: 4px solid #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        💡 <b>Analisis:</b> Berdasarkan data historis hingga tahun target, Nilai Ekonomi Lingkungan jauh melampaui 
+        Biaya Pengelolaan operasional kawasan. Hal ini menunjukkan efisiensi ekosistem dalam memberikan 
+        jasa lingkungan yang sangat menguntungkan bagi ekonomi publik serta masyarakat Kota Bandung.
+    </div>
+    """, unsafe_allow_html=True)
