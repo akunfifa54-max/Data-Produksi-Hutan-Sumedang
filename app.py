@@ -5,10 +5,10 @@ from sklearn.linear_model import LinearRegression
 import numpy as np
 
 # =========================
-# KONFIGURASI HALAMAN (WAJIB PALING ATAS)
+# CONFIG HALAMAN
 # =========================
 st.set_page_config(
-    page_title="Dashboard Produksi Kayu Jawa Barat",
+    page_title="Dashboard Babakan Siliwangi",
     page_icon="🌳",
     layout="wide"
 )
@@ -39,7 +39,10 @@ h1, h2, h3, h4 {
 col1, col2, col3 = st.columns([1,2,1])
 
 with col2:
-    st.image("OIP.webp", width=180)
+    st.image(
+        "https://upload.wikimedia.org/wikipedia/id/thumb/8/89/Logo_UNISBA.svg/512px-Logo_UNISBA.svg.png",
+        width=160
+    )
 
 st.markdown("""
 <div style="text-align:center;">
@@ -47,7 +50,7 @@ st.markdown("""
     <h3>FAKULTAS EKONOMI DAN BISNIS</h3>
     <h3>PROGRAM STUDI EKONOMI PEMBANGUNAN</h3>
     <hr>
-    <h1>DASHBOARD PRODUKSI KAYU JAWA BARAT</h1>
+    <h1>ANALISIS BABAKAN SILIWANGI CITY FOREST</h1>
     <h4>Mata Kuliah Ekonomi Sumber Daya Alam dan Lingkungan</h4>
 </div>
 """, unsafe_allow_html=True)
@@ -64,7 +67,7 @@ st.divider()
 # =========================
 # LOAD DATA
 # =========================
-df = pd.read_csv("produksi_kayu_jabar.csv")
+df = pd.read_csv("babakan_siliwangi.csv")
 
 # =========================
 # SIDEBAR MENU
@@ -81,7 +84,7 @@ menu = st.sidebar.radio(
 # =========================
 if menu == "Home":
 
-    st.title("🌳 Dashboard Produksi Kayu Jawa Barat")
+    st.title("🌳 Babakan Siliwangi City Forest")
 
     st.image(
         "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Forest.jpg/640px-Forest.jpg",
@@ -90,37 +93,34 @@ if menu == "Home":
 
     st.markdown("""
     ### Deskripsi
-    Dashboard ini menampilkan data produksi kayu di Jawa Barat.
+    Babakan Siliwangi adalah hutan kota di Bandung yang berfungsi sebagai ruang terbuka hijau dan wisata alam.
 
-    ### Fitur
-    - Data produksi
-    - Visualisasi tren
-    - Prediksi sederhana
+    ### Fungsi
+    - Paru-paru kota Bandung
+    - Wisata alam dan edukasi
+    - Ruang terbuka hijau (RTH)
 
     ### Sumber Data
-    Open Data Jawa Barat
+    Data kunjungan estimasi berbasis tren wisata Kota Bandung
     """)
+
+    st.metric("Total Tahun Data", len(df))
+    st.metric("Rata-rata Kunjungan", int(df["kunjungan"].mean()))
+    st.metric("Total Kunjungan", int(df["kunjungan"].sum()))
 
 # =========================
 # DATA
 # =========================
 elif menu == "Data":
 
-    st.title("📄 Data Produksi")
+    st.title("📄 Dataset Babakan Siliwangi")
 
-    jenis = st.selectbox(
-        "Pilih Jenis Kayu",
-        sorted(df["jenis_kayu"].unique())
-    )
-
-    filtered = df[df["jenis_kayu"] == jenis]
-
-    st.dataframe(filtered, use_container_width=True)
+    st.dataframe(df, use_container_width=True)
 
     st.download_button(
         "Download CSV",
-        filtered.to_csv(index=False),
-        file_name="data_kayu.csv",
+        df.to_csv(index=False),
+        file_name="babakan_siliwangi.csv",
         mime="text/csv"
     )
 
@@ -129,75 +129,64 @@ elif menu == "Data":
 # =========================
 elif menu == "Visualisasi":
 
-    st.title("📊 Visualisasi Produksi")
+    st.title("📊 Tren Kunjungan")
 
-    jenis = st.selectbox(
-        "Pilih Jenis Kayu",
-        sorted(df["jenis_kayu"].unique())
-    )
-
-    filtered = df[df["jenis_kayu"] == jenis]
-
-    fig1 = px.line(
-        filtered,
+    fig = px.line(
+        df,
         x="tahun",
-        y="produksi",
+        y="kunjungan",
         markers=True,
-        title="Tren Produksi"
+        title="Tren Kunjungan Babakan Siliwangi"
     )
-    st.plotly_chart(fig1, use_container_width=True)
+
+    st.plotly_chart(fig, use_container_width=True)
 
     fig2 = px.bar(
-        filtered,
+        df,
         x="tahun",
-        y="produksi",
-        title="Produksi per Tahun"
+        y="kunjungan",
+        title="Kunjungan per Tahun"
     )
+
     st.plotly_chart(fig2, use_container_width=True)
 
-    st.write(filtered["produksi"].describe())
+    st.write(df["kunjungan"].describe())
 
 # =========================
 # PREDIKSI
 # =========================
 elif menu == "Prediksi":
 
-    st.title("🔮 Prediksi Produksi")
+    st.title("🔮 Prediksi Kunjungan")
 
-    jenis = st.selectbox(
-        "Pilih Jenis Kayu",
-        sorted(df["jenis_kayu"].unique())
-    )
-
-    filtered = df[df["jenis_kayu"] == jenis]
-
-    X = filtered[["tahun"]]
-    y = filtered["produksi"]
+    X = df[["tahun"]]
+    y = df["kunjungan"]
 
     model = LinearRegression()
     model.fit(X, y)
 
-    tahun_prediksi = st.number_input(
+    tahun_pred = st.number_input(
         "Masukkan Tahun",
         min_value=int(df["tahun"].max()),
         value=int(df["tahun"].max() + 1)
     )
 
-    prediksi = model.predict([[tahun_prediksi]])[0]
+    pred = model.predict([[tahun_pred]])[0]
 
-    st.metric("Prediksi Produksi", f"{prediksi:,.0f}")
+    st.metric("Prediksi Kunjungan", f"{pred:,.0f}")
 
-    hasil = pd.DataFrame({
-        "tahun": list(filtered["tahun"]) + [tahun_prediksi],
-        "produksi": list(filtered["produksi"]) + [prediksi]
+    # grafik prediksi
+    df_pred = pd.DataFrame({
+        "tahun": list(df["tahun"]) + [tahun_pred],
+        "kunjungan": list(df["kunjungan"]) + [pred]
     })
 
     fig = px.line(
-        hasil,
+        df_pred,
         x="tahun",
-        y="produksi",
+        y="kunjungan",
         markers=True,
-        title="Prediksi Produksi"
+        title="Prediksi Kunjungan Babakan Siliwangi"
     )
 
     st.plotly_chart(fig, use_container_width=True)
