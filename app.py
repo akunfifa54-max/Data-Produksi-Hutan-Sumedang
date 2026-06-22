@@ -268,7 +268,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
 # ==========================================
 # MODUL 3: NERACA ALIRAN PRODUKSI
 # ==========================================
-elif menu == "📦 Neraca Aliran Production":
+elif menu == "📦 Neraca Aliran Produksi":  # FIX: Sekarang namanya sudah sama dengan menu navigasi
     st.header("📦 Neraca Aliran Output Hasil Produksi Tahunan")
     
     fig_prod = px.bar(
