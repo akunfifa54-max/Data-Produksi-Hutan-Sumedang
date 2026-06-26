@@ -272,7 +272,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         st.markdown("""
         <div class='info-box-success'>
             <h4>🔗 Relevansi Logis Terhadap Produksi Getah Pinus (HHBK)</h4>
-            <p>Kawasan Hutan Produksi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
+            <p>Kawasan Hutan Prodisi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -339,17 +339,41 @@ elif menu == "💰 Valuasi TEV & Ekonomi Makro":
         Melalui pemodelan TEV, Kelompok 2 berhasil membuktikan secara ilmiah bahwa **Getah Pinus (HHBK) memegang 70% dari total valuasi ekonomi kawasan**. Ini menjadi argumen akademik yang kuat bahwa optimalisasi ekonomi tidak harus dilakukan dengan melakukan penebangan pohon secara masif.
         """)
 
-# MODUL 5: BATAS KEBIJAKAN TRADE-OFF
+# MODUL 5: BATAS KEBIJAKAN TRADE-OFF (DENGAN SLIDER BARU)
 elif menu == "⚖️ Batas Kebijakan Trade-Off":
     st.header("⚖️ Analisis Batas Trade-Off Keseimbangan Ekonomi & Ekologi")
+    st.write("Gunakan slider di bawah untuk mensimulasikan pergeseran fokus kebijakan pengelolaan hutan di KPH Sumedang.")
+
+    # Slider Interaktif untuk Trade-Off
+    st.markdown("### 🎛️ Mainkan Simulasi Prioritas Kebijakan")
+    bobot_ekonomi = st.slider("Bobot Fokus Ekonomi Komersial (%):", 0, 100, 50, step=5)
+    bobot_ekologi = 100 - bobot_ekonomi
+    st.info(f"💡 Komposisi Kebijakan Saat Ini: **Ekonomi {bobot_ekonomi}%** | **Ekologi {bobot_ekologi}%**")
+
+    # Perhitungan Live Skor Berdasarkan Slider
+    skor_pendapatan = 20 + (bobot_ekonomi * 0.75)
+    skor_kelestarian = 15 + (bobot_ekologi * 0.80)
     
+    # Grafik Batas Trade-off Dinamis
+    fig_tradeoff = go.Figure()
+    fig_tradeoff.add_trace(go.Bar(
+        x=['Fokus Ekonomi', 'Fokus Ekologi'],
+        y=[skor_pendapatan, skor_kelestarian],
+        marker_color=['#d97706', '#16a34a'],
+        text=[f"{skor_pendapatan:.1f} Pts", f"{skor_kelestarian:.1f} Pts"],
+        textposition='auto'
+    ))
+    fig_tradeoff.update_layout(title="Live Indeks Kinerja Berdasarkan Prioritas Kebijakan", ylabel="Skor Indeks")
+    fig_tradeoff = apply_light_theme_layout(fig_tradeoff)
+    st.plotly_chart(fig_tradeoff, use_container_width=True)
+
     col_l, col_r = st.columns(2)
     with col_l:
         st.markdown("""
         <div class="info-box-warn">
             <h4>📈 Sektor Dorongan Ekonomi Komersial</h4>
             <p>Melakukan penyadapan getah secara berlebihan dan mempercepat siklus penebangan pohon demi mengejar profit jangka pendek.</p>
-            <b>Risiko:</b> Kerusakan fisik pada pohon, potensi pohon tumbang meningkat, serta kemampuan hutan dalam menyerap karbon akan menurun drastis.
+            <b>Risiko Kelebihan Bobot:</b> Kerusakan fisik pada pohon, potensi pohon tumbang meningkat, serta kemampuan hutan dalam menyerap karbon akan menurun drastis.
         </div>
         """, unsafe_allow_html=True)
     with col_r:
@@ -357,7 +381,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         <div class="info-box-warn" style="border-left-color: #1e40af !important; background-color: #eff6ff !important; color: #1e3a8a !important; border: 1px solid #bfdbfe;">
             <h4>🌍 Sektor Proteksi Ekosistem & Lingkungan</h4>
             <p>Melarang total seluruh aktivitas penebangan komersial dan penyadapan getah demi menjaga kemurnian kondisi alam.</p>
-            <b>Risiko:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pencaharian utamanya.
+            <b>Risiko Kelebihan Bobot:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pencaharian utamanya.
         </div>
         """, unsafe_allow_html=True)
         
