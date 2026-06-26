@@ -46,20 +46,21 @@ st.markdown("""
         padding: 55px; 
         border-radius: 16px; 
         margin-bottom: 35px;
-        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.15);
+        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.25);
         border: 1px solid #1b4332;
     }
     
-    /* Judul Utama: Emas Mewah Kontras Tinggi */
-    .hero-banner h1 { 
-        font-family: 'Cinzel', serif;
+    /* Gaya Judul Utama Menggunakan Selector Class Khusus Agar Tidak Tertimpa */
+    .luxury-title { 
+        font-family: 'Cinzel', serif !important;
         color: #dfc07b !important; /* Warna Emas Premium Kontras Tinggi */
         font-size: 46px !important;
         font-weight: 800 !important;
         letter-spacing: 3px !important;
-        line-height: 1.2;
+        line-height: 1.3 !important;
+        display: block;
         margin-bottom: 15px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Drop shadow tipis agar makin pop-out */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); /* Efek bayangan tegas agar teks pop-out */
     }
     
     /* Sub-deskripsi: Putih Sutra Terang */
@@ -226,9 +227,10 @@ def apply_luxury_theme_layout(fig):
 
 # MODUL 1: BERANDA KORPORAT UTAMA
 if menu == "🏠 Beranda Korporat Utama":
+    # Perbaikan total menggunakan class .luxury-title langsung pada tag span untuk memotong override dari Streamlit
     st.markdown("""
     <div class="hero-banner">
-        <h1>KPH SUMEDANG<br>ECO-FOREST VALUATION</h1>
+        <span class="luxury-title">KPH SUMEDANG<br>ECO-FOREST VALUATION</span>
         <p>Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan — PBL Kelompok 2</p>
     </div>
     """, unsafe_allow_html=True)
@@ -297,7 +299,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         st.markdown("""
         <div class='info-box-success'>
             <h4>🔗 Relevansi Logis Terhadap Produksi Getah Pinus (HHBK)</h4>
-            <p>Kawasan Hutan Produksi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
+            <p>Kawasan Hutan Prokdusi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -422,16 +424,15 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
 
 # MODUL 6: SLIDER SIMULASI FINANSIAL
 elif menu == "📊 Slider Simulasi Finansial":
+    # Perbaikan kontras banner pada menu Simulasi Finansial
     st.markdown("""
     <div style="
         background: linear-gradient(135deg, #0b2218 0%, #16382a 100%);
         padding: 50px; border-radius: 16px; text-align: center; margin-bottom: 35px;
-        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.15);
+        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.25);
         border: 1px solid #1b4332;
     ">
-        <h1 style="color: #dfc07b !important; font-family: 'Cinzel', serif; font-size: 44px; font-weight: 800; letter-spacing: 4px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">
-            🌳 ECO-FOREST VALUATION SYSTEM
-        </h1>
+        <span class="luxury-title" style="font-size: 44px !important;">🌳 ECO-FOREST VALUATION SYSTEM</span>
         <p style="color: #f4f1de !important; font-size: 16px; font-weight: 300; opacity: 0.90; margin-top: 10px; margin-bottom: 0; letter-spacing: 1px;">
             Pemodelan Matematika Ekonomi Kelayakan Investasi Kehutanan · KPH Sumedang
         </p>
