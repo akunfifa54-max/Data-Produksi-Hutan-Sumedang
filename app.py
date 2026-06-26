@@ -15,10 +15,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS untuk memastikan keterbacaan teks dan kecocokan warna navigasi sidebar
+# Custom CSS untuk memperbaiki kontras warna teks agar tidak gelap/redup
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&display=swap');
     
     /* Base Background App & Main Content */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
@@ -67,11 +67,22 @@ st.markdown("""
         font-weight: 600 !important;
     }
     
-    /* Metrics Layout style dari referensi video */
+    /* Metrics Layout style & Perbaikan Teks Gelap */
     .metric-box {
         background: #1f2937 !important; 
         border-radius: 12px; padding: 20px; text-align: left;
         color: #ffffff !important; margin-bottom: 15px;
+    }
+    .metric-box h4 {
+        color: #4ade80 !important;
+        font-weight: 700 !important;
+    }
+    .metric-box p, .metric-box li, .metric-box span {
+        color: #f3f4f6 !important;
+        font-size: 14px !important;
+    }
+    .metric-box b {
+        color: #ffffff !important;
     }
     .metric-box-title { font-size: 13px; color: #9ca3af !important; text-transform: uppercase; font-weight: 600; }
     .metric-box-value { font-size: 26px; font-weight: 700; color: #ffffff !important; margin-top: 5px; }
@@ -183,7 +194,6 @@ if menu == "🏠 Beranda Korporat Utama":
     </div>
     """, unsafe_allow_html=True)
     
-    # IDENTITAS DI LETAKKAN DI ATAS SEBELUM DESKRIPSI UTAMA
     col_main, col_side = st.columns([2, 1])
     with col_main:
         st.markdown("### 👥 Identitas Peneliti Kelompok 2:")
@@ -211,10 +221,10 @@ if menu == "🏠 Beranda Korporat Utama":
     with col_side:
         st.markdown("""
         <div class='metric-box' style='border-top: 4px solid #4ade80;'>
-            <h4 style='color:#4ade80; margin-top:0;'>🎯 Kemampuan Inti</h4>
-            <p style='color:#e5e7eb; font-size:14px;'>• <b>Valuasi TEV:</b> Menilai aset nyata pasar dan non-pasar (karbon).</p>
-            <p style='color:#e5e7eb; font-size:14px;'>• <b>Uji Sensitivitas Interaktif:</b> Simulasi ketahanan kas terhadap guncangan harga pasar.</p>
-            <p style='color:#e5e7eb; font-size:14px;'>• <b>Rekomendasi Kebijakan:</b> Penyusun strategi mitigasi konflik trade-off ekologi-ekonomi.</p>
+            <h4>🎯 Kemampuan Inti</h4>
+            <p>• <b>Valuasi TEV:</b> Menilai aset nyata pasar dan non-pasar (karbon).</p>
+            <p>• <b>Uji Sensitivitas Interaktif:</b> Simulasi ketahanan kas terhadap guncangan harga pasar.</p>
+            <p>• <b>Rekomendasi Kebijakan:</b> Penyusun strategi mitigasi konflik trade-off ekologi-ekonomi.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -333,7 +343,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         <div class="info-box-warn" style="border-left-color: #1e40af !important; background-color: #eff6ff !important; color: #1e3a8a !important; border: 1px solid #bfdbfe;">
             <h4>🌍 Sektor Proteksi Ekosistem & Lingkungan</h4>
             <p>Melarang total seluruh aktivitas penebangan komersial dan penyadapan getah demi menjaga kemurnian kondisi alam.</p>
-            <b>Risiko:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pincharian utamanya.
+            <b>Risiko:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pencaharian utamanya.
         </div>
         """, unsafe_allow_html=True)
         
@@ -371,11 +381,10 @@ elif menu == "📊 Slider Simulasi Finansial":
     </div>
     """, unsafe_allow_html=True)
     
-    # Judul dengan Ikon Gerigi (⚙️) sesuai referensi gambar
     st.markdown("## ⚙️ Simulasi Finansial")
     st.write("Uji komparatif simulasi multi-skenario hasil pemodelan komoditas kehutanan **KPH Sumedang** oleh **PBL Kelompok 2**.")
     
-    # 1. Parameter Input Sliders (Tanpa Harga Kredit Karbon)
+    # 1. Parameter Input Sliders
     st.markdown("### 🛠️ Pengaturan Parameter Utama (Spesifik Hutan Pinus Sumedang)")
     c_in1, c_in2, c_in3 = st.columns(3)
     with c_in1:
@@ -396,12 +405,10 @@ elif menu == "📊 Slider Simulasi Finansial":
     omset_kayu = volume_kayu_live * harga_kayu
     total_omset_komersial = omset_getah + omset_kayu
     
-    # Skenario A (Tradisional: Hanya omset fisik komersial)
     npv_tradisional = (total_omset_komersial * 5) / (1 + (suku_bunga/100))**5
     bcr_tradisional = 1.85 + (harga_getah / 15000)
     irr_tradisional = 12.5 + (harga_getah / 4000)
     
-    # Skenario B (Hijau Terintegrasi: Ditambah Nilai Valuasi Serapan Karbon Tetap Rp150.000/tCO2e secara internal)
     pemasukan_serapan_karbon = luas_simulasi * 55 * 150000  
     npv_hijau = npv_tradisional + pemasukan_serapan_karbon
     bcr_hijau = bcr_tradisional + 0.65
@@ -412,7 +419,7 @@ elif menu == "📊 Slider Simulasi Finansial":
 
     st.write("---")
     
-    # 3. Live Metrics Box Dashboard (Gaya Video Referensi)
+    # 3. Live Metrics Box Dashboard
     st.markdown("### 📊 Hasil Proyeksi Finansial Terupdate")
     c_out1, c_out2, c_out3, c_out4 = st.columns(4)
     with c_out1:
@@ -452,7 +459,6 @@ elif menu == "📊 Slider Simulasi Finansial":
 
     # 5. Tabel Data Komparasi Indikator Finansial
     st.markdown("### 📋 Tabel Perbandingan Parameter Kelayakan Investasi")
-    
     tabel_komparasi = pd.DataFrame({
         'Indikator Kelayakan Finansial': ['Proyeksi Nilai NPV (Rupiah)', 'Internal Rate of Return (IRR)', 'Benefit-Cost Ratio (BCR)'],
         'Skenario A (Tradisional)': [f"Rp {int(npv_tradisional):,}", f"{irr_tradisional:.2f} %", f"{bcr_tradisional:.2f} x"],
