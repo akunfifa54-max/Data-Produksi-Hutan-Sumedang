@@ -6,7 +6,7 @@ import os
 from PIL import Image
 
 # ==========================================
-# 1. FIXED CORPORATE LIGHT MODE (FULL BAHASA INDONESIA)
+# 1. FIXED CORPORATE THEME & STYLE ADJUSTMENTS
 # ==========================================
 st.set_page_config(
     page_title="KPH Sumedang Eco-Forest Valuation Dashboard",
@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS Light Mode - Mengunci warna teks agar kontras tinggi dan formal
+# Custom CSS untuk memastikan keterbacaan teks dan kecocokan warna navigasi sidebar
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -45,10 +45,10 @@ st.markdown("""
     }
     .hero-banner h1, .hero-banner p { color: #ffffff !important; }
     
-    /* Sidebar */
+    /* Sidebar styling agar teks navigasi terlihat jelas dan kontras */
     section[data-testid="stSidebar"] { 
-        background-color: #ffffff !important; 
-        border-right: 1px solid #e2e8f0 !important;
+        background-color: #111827 !important; /* Latar belakang gelap konstan */
+        border-right: 1px solid #1f2937 !important;
     }
     
     section[data-testid="stSidebar"] .stMarkdown p, 
@@ -56,25 +56,26 @@ st.markdown("""
     section[data-testid="stSidebar"] h4,
     section[data-testid="stSidebar"] span,
     section[data-testid="stSidebar"] label {
-        color: #0f172a !important;
+        color: #f3f4f6 !important; /* Teks putih/terang agar kontras dengan latar belakang gelap */
         font-weight: 600 !important;
     }
     
     /* Warna teks pilihan Radio Button / Menu Navigasi */
     div[data-testid="stRadio"] label p {
-        color: #0f172a !important;
+        color: #f3f4f6 !important;
         font-size: 15px !important;
         font-weight: 600 !important;
     }
     
-    /* Metrik Card */
-    .metric-container {
-        background: #f8fafc !important; 
-        border: 2px solid #1e40af !important; 
-        border-radius: 16px; padding: 26px 22px; text-align: center; 
+    /* Metrics Layout style dari referensi video */
+    .metric-box {
+        background: #1f2937 !important; 
+        border-radius: 12px; padding: 20px; text-align: left;
+        color: #ffffff !important; margin-bottom: 15px;
     }
-    .metric-hdr { font-size: 12px; color: #475569 !important; text-transform: uppercase; font-weight: 700; }
-    .metric-val { font-size: 30px; font-weight: 800; color: #1e3a8a !important; margin-top: 8px; }
+    .metric-box-title { font-size: 13px; color: #9ca3af !important; text-transform: uppercase; font-weight: 600; }
+    .metric-box-value { font-size: 26px; font-weight: 700; color: #ffffff !important; margin-top: 5px; }
+    .metric-box-delta { font-size: 14px; color: #10b981 !important; font-weight: 600; margin-top: 2px; }
     
     /* Kotak Info */
     .info-box-warn {
@@ -88,6 +89,9 @@ st.markdown("""
     
     .stMarkdown, p, span, li {
         color: #0f172a !important;
+    }
+    section[data-testid="stSidebar"] .stMarkdown p {
+        color: #f3f4f6 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -123,10 +127,6 @@ df_produksi = safe_load_csv("Produksi Hasil Hutan.csv", {
     'Nilai': [5450, 24800]
 })
 
-luas_total_hutan = 31850
-volume_getah_tahunan = 5450  
-volume_kayu_tahunan = 24800   
-
 # ==========================================
 # 3. BRANDING LOGO & NAVIGATION
 # ==========================================
@@ -134,9 +134,9 @@ logo_path = "OIP.webp"
 if os.path.exists(logo_path):
     st.sidebar.image(Image.open(logo_path), use_container_width=True)
 
-st.sidebar.markdown("<h2 style='text-align: center; margin-top:5px; font-size:20px; color:#166534; font-weight:700;'>PBL KELOMPOK 2</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("<p style='text-align: center; color: #475569; font-size:13px; margin-top:-10px;'>Ekonomi Sumber Daya Alam & Lingkungan</p>", unsafe_allow_html=True)
-st.sidebar.markdown("<hr style='border-color: #cbd5e1;'>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='text-align: center; margin-top:5px; font-size:20px; color:#4ade80; font-weight:700;'>PBL KELOMPOK 2</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='text-align: center; color: #9ca3af; font-size:13px; margin-top:-10px;'>Ekonomi Sumber Daya Alam & Lingkungan</p>", unsafe_allow_html=True)
+st.sidebar.markdown("<hr style='border-color: #374151;'>", unsafe_allow_html=True)
 
 st.sidebar.markdown("✨ **Menu Navigasi Utama:**")
 menu = st.sidebar.radio(
@@ -183,7 +183,7 @@ if menu == "🏠 Beranda Korporat Utama":
         Platform dashboard digital ini dirancang secara khusus untuk menganalisis struktur tata kelola ekonomi makro dan mikro 
         pada **Kesatuan Pemangkuan Hutan (KPH) Sumedang**. Fokus kajian ilmiah diarahkan pada tegakan vegetasi komoditas **Pinus (*Pinus merkusii*)**.
         
-        Melalui metodologi Ekonomi Sumber Daya Alam, kami membedah bagaimana pemanfaatan ekonomi komersial dari extraction hasil hutan 
+        Melalui metodologi Ekonomi Sumber Daya Alam, kami membedah bagaimana pemanfaatan ekonomi komersial dari ekstraksi hasil hutan 
         dapat dioptimalkan tanpa mendegradasi fungsi perlindungan lingkungan hidup (*sustainable forest management*).
         """)
         
@@ -201,11 +201,11 @@ if menu == "🏠 Beranda Korporat Utama":
     
     with col_side:
         st.markdown("""
-        <div class='metric-container' style='border-top: 4px solid #166534; text-align:left; background-color:#ffffff !important;'>
-            <h4 style='color:#166534; margin-top:0;'>🎯 Kemampuan Inti</h4>
-            <p style='color:#0f172a; font-size:14px; font-weight:600;'>• <b>Valuasi TEV:</b> Menilai aset nyata pasar dan non-pasar (karbon).</p>
-            <p style='color:#0f172a; font-size:14px; font-weight:600;'>• <b>Uji Sensitivitas Interaktif:</b> Simulasi ketahanan kas terhadap guncangan harga pasar.</p>
-            <p style='color:#0f172a; font-size:14px; font-weight:600;'>• <b>Rekomendasi Kebijakan:</b> Penyusun strategi mitigasi konflik trade-off ekologi-ekonomi.</p>
+        <div class='metric-box' style='border-top: 4px solid #4ade80;'>
+            <h4 style='color:#4ade80; margin-top:0;'>🎯 Kemampuan Inti</h4>
+            <p style='color:#e5e7eb; font-size:14px;'>• <b>Valuasi TEV:</b> Menilai aset nyata pasar dan non-pasar (karbon).</p>
+            <p style='color:#e5e7eb; font-size:14px;'>• <b>Uji Sensitivitas Interaktif:</b> Simulasi ketahanan kas terhadap guncangan harga pasar.</p>
+            <p style='color:#e5e7eb; font-size:14px;'>• <b>Rekomendasi Kebijakan:</b> Penyusun strategi mitigasi konflik trade-off ekologi-ekonomi.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -250,16 +250,16 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         c_flora, c_fauna = st.columns(2)
         with c_flora:
             st.markdown("""
-            <div class='metric-container' style='text-align: left; border-top: 4px solid #166534; background-color:#ffffff !important;'>
-                <h4 style='color:#166534;'>🌲 Varietas Flora (Vegetasi)</h4>
+            <div class='info-box-success' style='margin-top:0;'>
+                <h4 style='color:#14532d;'>🌲 Varietas Flora (Vegetasi)</h4>
                 <p>• <b>Pinus merkusii:</b> Tegakan utama penopang nilai ekonomi kawasan.</p>
                 <p>• <b>Kaliandra & Mahoni:</b> Berfungsi sebagai penahan sebaran kebakaran serta peningkat unsur hara tanah.</p>
             </div>
             """, unsafe_allow_html=True)
         with c_fauna:
             st.markdown("""
-            <div class='metric-container' style='text-align: left; border-top: 4px solid #d97706; background-color:#ffffff !important;'>
-                <h4 style='color:#d97706;'>🦅 Taksonomi Fauna (Satwa Liar)</h4>
+            <div class='info-box-warn' style='margin-top:0;'>
+                <h4 style='color:#78350f;'>🦅 Taksonomi Fauna (Satwa Liar)</h4>
                 <p>• <b>Predator:</b> Menjadi habitat penting burung Elang Jawa (Spizaetus bartelsi) yang dilindungi oleh negara.</p>
                 <p>• <b>Mamalia:</b> Populasi Babi Hutan, Kancil, serta berbagai jenis satwa liar endemik lainnya.</p>
             </div>
@@ -286,13 +286,13 @@ elif menu == "📦 Neraca Aliran Produksi":
 elif menu == "💰 Valuasi TEV & Ekonomi Makro":
     st.header("💰 Analisis Total Economic Value (TEV) & Proxy Kelayakan")
     
-    c_m1, c_m2, c_m3 = st.columns(3)
-    with c_m1:
-        st.markdown('<div class="metric-container"><div class="metric-hdr">Net Present Value (NPV) Baseline</div><div class="metric-val">Rp 198,500,000 / Ha</div></div>', unsafe_allow_html=True)
-    with c_m2:
-        st.markdown('<div class="metric-container"><div class="metric-hdr">Internal Rate of Return (IRR)</div><div class="metric-val">15.80 %</div></div>', unsafe_allow_html=True)
-    with c_m3:
-        st.markdown('<div class="metric-container"><div class="metric-hdr">Benefit-Cost Ratio (BCR)</div><div class="metric-val">2.85 x</div></div>', unsafe_allow_html=True)
+    col_v1, col_v2, col_v3 = st.columns(3)
+    with col_v1:
+        st.markdown('<div class="metric-box"><div class="metric-box-title">Net Present Value (NPV) Baseline</div><div class="metric-box-value">Rp 198,500,000 / Ha</div></div>', unsafe_allow_html=True)
+    with col_v2:
+        st.markdown('<div class="metric-box"><div class="metric-box-title">Internal Rate of Return (IRR)</div><div class="metric-box-value">15.80 %</div></div>', unsafe_allow_html=True)
+    with col_v3:
+        st.markdown('<div class="metric-box"><div class="metric-box-title">Benefit-Cost Ratio (BCR)</div><div class="metric-box-value">2.85 x</div></div>', unsafe_allow_html=True)
         
     st.write("---")
     
@@ -344,56 +344,101 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
     """, unsafe_allow_html=True)
 
 # ==========================================
-# MODUL 6: SLIDER SIMULASI FINANSIAL
+# MODUL 6: SLIDER SIMULASI FINANSIAL (ADVANCED COMPARISON MODE)
 # ==========================================
 elif menu == "📊 Slider Simulasi Finansial":
-    st.header("📊 Slider Simulasi Sensitivitas & Kelayakan Finansial Dinamis")
-    # FIX: Menampilkan nama kelompok pada teks pengantar komponen simulasi
-    st.write("Uji ketahanan finansial investasi KPH Sumedang berdasarkan perubahan harga jual getah pinus secara real-time. (Pemodelan oleh: **PBL Kelompok 2**)")
-
-    harga_simulasi = st.slider(
-        "Atur Prakiraan Harga Jual Getah Pinus (Rupiah / Kilogram):",
-        min_value=5000,
-        max_value=25000,
-        value=11500,
-        step=500
-    )
+    st.header("📊 Slider Simulasi Sensitivitas & Perbandingan Skenario Finansial")
+    st.write("Pemodelan dan simulasi komparatif multi-skenario secara dinamis dikembangkan oleh **PBL Kelompok 2**.")
     
-    omset_getah_live = volume_getah_tahunan * 1000 * harga_simulasi
-    omset_kayu_statis = volume_kayu_tahunan * 650000
-    total_omset_live = omset_getah_live + omset_kayu_statis
+    # 1. Parameter Input Sliders (Mengikuti gaya panel atas di video acuan)
+    st.markdown("### 🛠️ Pengaturan Parameter Utama")
+    c_in1, c_in2, c_in3 = st.columns(3)
+    with c_in1:
+        luas_simulasi = st.slider("Luas Kawasan Simulasi (Ha):", 1000, 50000, 21251, step=500)
+        daur_tebang = st.slider("Daur Tebang Jangka Waktu (Tahun):", 10, 100, 60, step=5)
+    with c_in2:
+        harga_kayu = st.slider("Harga Log Kayu Jati / Pinus (Rp/m³):", 500000, 5000000, 1500000, step=50000)
+        biaya_produksi = st.slider("Biaya Produksi & Operasional (Rp/m³):", 200000, 3000000, 1000000, step=50000)
+    with c_in3:
+        suku_bunga = st.slider("Suku Bunga / Discount Rate (%):", 2.0, 25.0, 15.0, step=0.5)
+        harga_karbon = st.slider("Harga Kredit Karbon (Rp/tCO2e):", 50000, 500000, 150000, step=10000)
+        
+    # 2. Perhitungan Logika Simulasi Dinamis (Skema Tradisional vs Skema Hijau)
+    total_volume_estimasi = luas_simulasi * 120 # Proksi volume panen
     
-    rasio_indeks = harga_simulasi / 11500
-    npv_live = 198500000 * rasio_indeks
-    bcr_live = 2.85 * rasio_indeks
+    # Skenario A (Tradisional - Manfaat Ekosistem Karbon Sangat Kecil)
+    npv_tradisional = (total_volume_estimasi * (harga_kayu - biaya_produksi)) / (1 + (suku_bunga/100))**5
+    irr_tradisional = 18.0 - (suku_bunga * 0.1)
+    bcr_tradisional = 1.45 + (harga_kayu / 3000000)
+    
+    # Skenario B (Hijau Terintegrasi - Ditambah Pemasukan Serapan Karbon & Getah)
+    pemasukan_karbon = luas_simulasi * 25 * harga_karbon
+    npv_hijau = npv_tradisional + pemasukan_karbon
+    irr_hijau = irr_tradisional + 2.0
+    bcr_hijau = bcr_tradisional + 0.37
+    
+    selisih_npv = npv_hijau - npv_tradisional
+    persen_peningkatan = (selisih_npv / npv_tradisional) * 100
 
     st.write("---")
-    st.markdown("### 📈 Proyeksi Indikator Finansial Hasil Slider Simulasi")
     
-    v1, v2, v3 = st.columns(3)
-    with v1:
-        st.metric(label="Proyeksi NPV Dinamis", value=f"Rp {int(npv_live):,}", delta=f"{((rasio_indeks-1)*100):+.1f}% Pergeseran")
-    with v2:
-        st.metric(label="Proyeksi BC Ratio Dinamis", value=f"{bcr_live:.2f} x", delta=f"{(bcr_live - 2.85):+.2f}")
-    with v3:
-        st.metric(label="Total Estimasi Penerimaan Bruto Kawasan", value=f"Rp {int(total_omset_live):,}")
+    # 3. Hasil Live Metrics Panel (Gaya video acuan)
+    st.markdown("### 📊 Hasil Output Proyeksi Simulasi")
+    c_out1, c_out2, c_out3, c_out4 = st.columns(4)
+    with c_out1:
+        st.markdown(f'<div class="metric-box"><div class="metric-box-title">Total Luas Wilayah</div><div class="metric-box-value">{luas_simulasi:,} Ha</div></div>', unsafe_allow_html=True)
+    with c_out2:
+        st.markdown(f'<div class="metric-box"><div class="metric-box-title">Total Estimasi Volume</div><div class="metric-box-value">{total_volume_estimasi:,} m³</div></div>', unsafe_allow_html=True)
+    with c_out3:
+        st.markdown(f'<div class="metric-box"><div class="metric-box-title">NPV (Tanpa Karbon)</div><div class="metric-box-value">Rp {int(npv_tradisional):,}</div></div>', unsafe_allow_html=True)
+    with c_out4:
+        st.markdown(f'<div class="metric-box"><div class="metric-box-title">NPV (Dengan Karbon)</div><div class="metric-box-value">Rp {int(npv_hijau):,}</div><div class="metric-box-delta">+Rp {int(pemasukan_karbon):,} Delta</div></div>', unsafe_allow_html=True)
 
     st.write("---")
     
-    chart_df = pd.DataFrame({
-        'Kategori Sumber Omset': ['Getah Pinus (Dinamis)', 'Kayu Log Komersial (Statis)'],
-        'Nilai Pendapatan Bruto (Rp)': [omset_getah_live, omset_kayu_statis]
+    # 4. Visualisasi Grafik Perbandingan NPV
+    st.markdown("### 📈 Visualisasi Grafik Perbandingan NPV")
+    chart_data = pd.DataFrame({
+        'Skenario Analisis': ['Skenario A (Tradisional)', 'Skenario B (Hijau Terintegrasi)'],
+        'Nilai NPV Terproyeksi (Rp)': [npv_tradisional, npv_hijau]
     })
     
-    # FIX: Menambahkan identitas PBL Kelompok 2 langsung ke dalam judul grafik chart
     fig_live = px.bar(
-        chart_df, x='Kategori Sumber Omset', y='Nilai Pendapatan Bruto (Rp)',
-        color='Kategori Sumber Omset', text_auto='.3s',
-        color_discrete_sequence=['#b45309', '#166534'],
-        title=f"PBL Kelompok 2: Analisis Omset pada Tingkat Harga Rp {harga_simulasi:,} / Kg"
+        chart_data, x='Skenario Analisis', y='Nilai NPV Terproyeksi (Rp)',
+        color='Skenario Analisis', text_auto='.3s',
+        color_discrete_sequence=['#ef4444', '#10b981'],
+        title=f"Analisis Kelompok 2: Grafik Komparatif Kelayakan Investasi Hutan"
     )
     fig_live = apply_light_theme_layout(fig_live)
     st.plotly_chart(fig_live, use_container_width=True)
+    
+    # Analisis Teks Di Bawah Grafik
+    st.markdown(f"""
+    > 📌 **Analisis Grafik Perbandingan NPV:** > * **Skenario B (Hijau Terintegrasi)** memiliki tingkat pengembalian nilai NPV yang jauh lebih tinggi dibandingkan dengan skema Skenario A.  
+    > * Selisih nilai keuntungan finansial riil di antara kedua jenis skenario pengelolaan adalah sebesar **Rp {int(selisih_npv):,}**.
+    """)
+
+    st.write("---")
+
+    # 5. Tabel Data Komparasi Indikator Finansial (Sama dengan tabel di video)
+    st.markdown("### 📋 Tabel Perbandingan Parameter Kelayakan Investasi")
+    
+    tabel_komparasi = pd.DataFrame({
+        'Indikator Kelayakan Finansial': ['Proyeksi Nilai NPV (Rupiah)', 'Internal Rate of Return (IRR)', 'Benefit-Cost Ratio (BCR)'],
+        'Skenario A (Tradisional)': [f"Rp {int(npv_tradisional):,}", f"{irr_tradisional:.2f} %", f"{bcr_tradisional:.2f} x"],
+        'Skenario B (Hijau Terintegrasi)': [f"Rp {int(npv_hijau):,}", f"{irr_hijau:.2f} %", f"{bcr_hijau:.2f} x"]
+    })
+    st.dataframe(tabel_komparasi, use_container_width=True, hide_index=True)
+
+    # 6. Kesimpulan Kotak Hijau (Gaya video acuan)
+    st.markdown(f"""
+    <div class="info-box-success">
+        <h4>💡 Ringkasan Rekomendasi Finansial - PBL Kelompok 2</h4>
+        <p>Berdasarkan perhitungan simulasi, <b>Skenario B (Hijau Terintegrasi)</b> terbukti jauh lebih layak dipilih secara akademis dan bisnis. 
+        Implementasi ini mampu meningkatkan proyeksi nilai kelayakan bersih (NPV) sebesar <b>{persen_peningkatan:.2f}%</b> serta mendongkrak skor efisiensi BCR dari {bcr_tradisional:.2f} menjadi <b>{bcr_hijau:.2f}</b>.</p>
+        <span style="font-size:12px; font-weight:700;">🟢 STATUS MODEL: SIMULASI BERHASIL DISINKRONKASI</span>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # MODUL 7: VALIDASI MASTER DATA CSV
