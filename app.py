@@ -183,17 +183,9 @@ if menu == "🏠 Beranda Korporat Utama":
     </div>
     """, unsafe_allow_html=True)
     
+    # IDENTITAS DI LETAKKAN DI ATAS SEBELUM DESKRIPSI UTAMA
     col_main, col_side = st.columns([2, 1])
     with col_main:
-        st.markdown("### 📑 Latar Belakang Riset Kasus (PBL)")
-        st.write("""
-        Platform dashboard digital ini dirancang secara khusus untuk menganalisis struktur tata kelola ekonomi makro dan mikro 
-        pada **Kesatuan Pemangkuan Hutan (KPH) Sumedang**. Fokus kajian ilmiah diarahkan pada tegakan vegetasi komoditas **Pinus (*Pinus merkusii*)**.
-        
-        Melalui metodologi Ekonomi Sumber Daya Alam, kami membedah bagaimana pemanfaatan ekonomi komersial dari ekstraksi hasil hutan 
-        dapat dioptimalkan tanpa mendegradasi fungsi perlindungan lingkungan hidup (*sustainable forest management*).
-        """)
-        
         st.markdown("### 👥 Identitas Peneliti Kelompok 2:")
         st.markdown("""
         * **Mata Kuliah:** Ekonomi Sumber Daya Alam dan Lingkungan  
@@ -204,6 +196,16 @@ if menu == "🏠 Beranda Korporat Utama":
         1. 🧑‍💻 **Radea Rahman Dwiyana** (10090224001)
         2. 👩‍💻 **Bunga Wiati Manaki** (10090224026)
         3. 🧑‍💻 **Shidqi Alhamdani Mieftah** (10090224032)
+        """)
+        st.write("---")
+        
+        st.markdown("### 📑 Latar Belakang Riset Kasus (PBL)")
+        st.write("""
+        Platform dashboard digital ini dirancang secara khusus untuk menganalisis struktur tata kelola ekonomi makro dan mikro 
+        pada **Kesatuan Pemangkuan Hutan (KPH) Sumedang**. Fokus kajian ilmiah diarahkan pada tegakan vegetasi komoditas **Pinus (*Pinus merkusii*)**.
+        
+        Melalui metodologi Ekonomi Sumber Daya Alam, kami membedah bagaimana pemanfaatan ekonomi komersial dari ekstraksi hasil hutan 
+        dapat dioptimalkan tanpa mendegradasi fungsi perlindungan lingkungan hidup (*sustainable forest management*).
         """)
     
     with col_side:
@@ -331,7 +333,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         <div class="info-box-warn" style="border-left-color: #1e40af !important; background-color: #eff6ff !important; color: #1e3a8a !important; border: 1px solid #bfdbfe;">
             <h4>🌍 Sektor Proteksi Ekosistem & Lingkungan</h4>
             <p>Melarang total seluruh aktivitas penebangan komersial dan penyadapan getah demi menjaga kemurnian kondisi alam.</p>
-            <b>Risiko:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pencaharian utamanya.
+            <b>Risiko:</b> Pendapatan asli daerah dari sektor kehutanan akan menurun drastis dan masyarakat penyadap lokal akan kehilangan mata pincharian utamanya.
         </div>
         """, unsafe_allow_html=True)
         
