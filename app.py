@@ -272,7 +272,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         st.markdown("""
         <div class='info-box-success'>
             <h4>🔗 Relevansi Logis Terhadap Produksi Getah Pinus (HHBK)</h4>
-            <p>Kawasan Hutan Prodisi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
+            <p>Kawasan Hutan Produksi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -339,7 +339,7 @@ elif menu == "💰 Valuasi TEV & Ekonomi Makro":
         Melalui pemodelan TEV, Kelompok 2 berhasil membuktikan secara ilmiah bahwa **Getah Pinus (HHBK) memegang 70% dari total valuasi ekonomi kawasan**. Ini menjadi argumen akademik yang kuat bahwa optimalisasi ekonomi tidak harus dilakukan dengan melakukan penebangan pohon secara masif.
         """)
 
-# MODUL 5: BATAS KEBIJAKAN TRADE-OFF (DENGAN SLIDER BARU)
+# MODUL 5: BATAS KEBIJAKAN TRADE-OFF (FIXED PARAMETER)
 elif menu == "⚖️ Batas Kebijakan Trade-Off":
     st.header("⚖️ Analisis Batas Trade-Off Keseimbangan Ekonomi & Ekologi")
     st.write("Gunakan slider di bawah untuk mensimulasikan pergeseran fokus kebijakan pengelolaan hutan di KPH Sumedang.")
@@ -354,7 +354,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
     skor_pendapatan = 20 + (bobot_ekonomi * 0.75)
     skor_kelestarian = 15 + (bobot_ekologi * 0.80)
     
-    # Grafik Batas Trade-off Dinamis
+    # Grafik Batas Trade-off Dinamis - FIXED PARAMETER
     fig_tradeoff = go.Figure()
     fig_tradeoff.add_trace(go.Bar(
         x=['Fokus Ekonomi', 'Fokus Ekologi'],
@@ -363,7 +363,10 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
         text=[f"{skor_pendapatan:.1f} Pts", f"{skor_kelestarian:.1f} Pts"],
         textposition='auto'
     ))
-    fig_tradeoff.update_layout(title="Live Indeks Kinerja Berdasarkan Prioritas Kebijakan", ylabel="Skor Indeks")
+    fig_tradeoff.update_layout(
+        title="Live Indeks Kinerja Berdasarkan Prioritas Kebijakan", 
+        yaxis_title="Skor Indeks"
+    )
     fig_tradeoff = apply_light_theme_layout(fig_tradeoff)
     st.plotly_chart(fig_tradeoff, use_container_width=True)
 
