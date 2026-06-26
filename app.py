@@ -422,7 +422,7 @@ elif menu == "📊 Slider Simulasi Finansial":
     """, unsafe_allow_html=True)
     
     st.markdown("## ⚙️ Simulasi Finansial")
-    st.write("Uji komparatif simulasi multi-skenario hasil pemodelan komoditas kehutanan **KPH Sumedang** oleh **PBL Kelompok 2**.")
+    st.write("Uji komparatif simulasi multi-skenario hasil pemodelan komoditas kehutanan **KPH Sumedang** oleh **Kelompok 2**.")
     
     # 1. Parameter Input Sliders
     st.markdown("### 🛠️ Pengaturan Parameter Utama (Spesifik Hutan Pinus Sumedang)")
