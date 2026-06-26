@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS untuk memperbaiki kontras warna teks agar tidak gelap/redup
+# Custom CSS - Menghilangkan bug elemen hijau kosong dan memperbaiki kontras teks
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700&display=swap');
@@ -88,14 +88,28 @@ st.markdown("""
     .metric-box-value { font-size: 26px; font-weight: 700; color: #ffffff !important; margin-top: 5px; }
     .metric-box-delta { font-size: 14px; color: #10b981 !important; font-weight: 600; margin-top: 2px; }
     
-    /* Kotak Info */
+    /* Kotak Info Bersih Tanpa Bug Elemen Hijau Atas */
     .info-box-warn {
-        background-color: #fef3c7 !important; border-left: 6px solid #d97706 !important;
-        padding: 22px; border-radius: 12px; margin-top: 20px; color: #78350f !important;
+        background-color: #fef3c7 !important; 
+        border-left: 6px solid #d97706 !important;
+        padding: 22px; 
+        border-radius: 12px; 
+        margin-top: 20px; 
+        margin-bottom: 20px;
+        color: #78350f !important;
     }
     .info-box-success {
-        background-color: #dcfce7 !important; border-left: 6px solid #16a34a !important;
-        padding: 22px; border-radius: 12px; margin-top: 20px; color: #14532d !important;
+        background-color: #dcfce7 !important; 
+        border-left: 6px solid #16a34a !important;
+        padding: 22px; 
+        border-radius: 12px; 
+        margin-top: 20px; 
+        margin-bottom: 20px;
+        color: #14532d !important;
+    }
+    .info-box-warn h4, .info-box-success h4 {
+        margin-top: 0px !important;
+        padding-top: 0px !important;
     }
     
     .stMarkdown, p, span, li {
@@ -244,23 +258,23 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
             st.markdown("##### Sebaran Luas Pengelolaan Wilayah Kerja")
             st.dataframe(df_profil, use_container_width=True, hide_index=True)
         with col_b:
-            st.markdown("<div class='info-box-success' style='margin-top:0;'>", unsafe_allow_html=True)
-            st.markdown("##### 📍 Kondisi Topografi & Tanah")
-            st.write("""
-            Wilayah administrasi KPH Sumedang didominasi oleh perbukitan bergelombang tajam dengan karakteristik tanah latosol dan andosol yang subur. Kondisi iklim mikro serta curah hujan yang stabil menjadi prasyarat utama optimalnya pertumbuhan dan produktivitas getah pinus.
-            """)
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("""
+            <div class='info-box-success' style='margin-top:0;'>
+                <h4>📍 Kondisi Topografi & Tanah</h4>
+                <p>Wilayah administrasi KPH Sumedang didominasi oleh perbukitan bergelombang tajam dengan karakteristik tanah latosol dan andosol yang subur. Kondisi iklim mikro serta curah hujan yang stabil menjadi prasyarat utama optimalnya pertumbuhan dan produktivitas getah pinus.</p>
+            </div>
+            """, unsafe_allow_html=True)
 
     with tab_status:
         st.markdown("### 🏛️ Kepastian Hukum Tata Kawasan Hutan")
         st.write("Mayoritas wilayah KPH Sumedang berstatus hukum sebagai **HUTAN PRODUKSI (HP)**, dikombinasikan dengan **Hutan Lindung (HL)** di area hulu DAS.")
         
-        st.markdown("<div class='info-box-success'>", unsafe_allow_html=True)
-        st.markdown("##### 🔗 Relevansi Logis Terhadap Produksi Getah Pinus (HHBK)")
-        st.write("""
-        Kawasan Hutan Produksi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, **penyadapan Getah Pinus (HHBK)** menjadi solusi jalan tengah yang strategis. **Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.**
-        """)
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class='info-box-success'>
+            <h4>🔗 Relevansi Logis Terhadap Produksi Getah Pinus (HHBK)</h4>
+            <p>Kawasan Hutan Produksi diwajibkan memberikan kontribusi ekonomi namun dengan tetap menjaga kelestarian lingkungan. Oleh karena itu, <b>penyadapan Getah Pinus (HHBK)</b> menjadi solusi jalan tengah yang strategis. <b>Pohon pinus tetap berdiri tegak untuk menyerap karbon dan menahan erosi tanah, sementara komoditas getahnya dapat dipanen secara berkelanjutan sebagai sumber pendapatan.</b></p>
+        </div>
+        """, unsafe_allow_html=True)
 
     with tab_biodiv:
         st.markdown("### 🦅 Inventarisasi Keanekaragaman Hayati")
@@ -268,7 +282,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         with c_flora:
             st.markdown("""
             <div class='info-box-success' style='margin-top:0;'>
-                <h4 style='color:#14532d;'>🌲 Varietas Flora (Vegetasi)</h4>
+                <h4>🌲 Varietas Flora (Vegetasi)</h4>
                 <p>• <b>Pinus merkusii:</b> Tegakan utama penopang nilai ekonomi kawasan.</p>
                 <p>• <b>Kaliandra & Mahoni:</b> Berfungsi sebagai penahan sebaran kebakaran serta peningkat unsur hara tanah.</p>
             </div>
@@ -276,7 +290,7 @@ elif menu == "📄 Karakteristik & Hayati Wilayah":
         with c_fauna:
             st.markdown("""
             <div class='info-box-warn' style='margin-top:0;'>
-                <h4 style='color:#78350f;'>🦅 Taksonomi Fauna (Satwa Liar)</h4>
+                <h4>🦅 Taksonomi Fauna (Satwa Liar)</h4>
                 <p>• <b>Predator:</b> Menjadi habitat penting burung Elang Jawa (Spizaetus bartelsi) yang dilindungi oleh negara.</p>
                 <p>• <b>Mamalia:</b> Populasi Babi Hutan, Kancil, serta berbagai jenis satwa liar endemik lainnya.</p>
             </div>
@@ -356,7 +370,6 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
 
 # MODUL 6: SLIDER SIMULASI FINANSIAL
 elif menu == "📊 Slider Simulasi Finansial":
-    # Hero Banner Mini sesuai referensi Screenshot 2026-06-26 140157.png
     st.markdown("""
     <div style="
         background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
