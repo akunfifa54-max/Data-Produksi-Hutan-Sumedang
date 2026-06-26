@@ -6,7 +6,7 @@ import os
 from PIL import Image
 
 # ==========================================
-# 1. KONFIGURASI HALAMAN & TEMA ELEGAN LUXURY (LIGHT)
+# 1. KONFIGURASI HALAMAN & TEMA ELEGAN LUXURY CONTRAST
 # ==========================================
 st.set_page_config(
     page_title="KPH Sumedang Eco-Forest Valuation Dashboard",
@@ -15,15 +15,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS - Desain Estetik Elegan, Mewah, & Bersih (Luxury Light Mode)
+# Custom CSS - Fokus pada Kontras Tinggi, Elegan, dan Tipografi Premium
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
     
-    /* Latar Belakang Utama Aplikasi & Konten */
+    /* Latar Belakang Utama Aplikasi (Luxury Light Theme) */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-        background-color: #faf9f6 !important; /* Warna Latar Ivory/Cream Mewah */
-        color: #2c3e50 !important; /* Warna Teks Utama Charcoal */
+        background-color: #faf9f6 !important; 
+        color: #1a2530 !important; 
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
@@ -32,29 +32,43 @@ st.markdown("""
         background-color: #faf9f6 !important; 
     }
     
-    /* Tipografi Judul */
+    /* Tipografi Judul Umum */
     h1, h2, h3, h4, h5, h6 { 
-        color: #1b4332 !important; /* Deep Forest Green Premium */
+        color: #112d22 !important; 
         font-weight: 700;
-        letter-spacing: -0.5px;
     }
     
-    /* Jumbotron Banner Utama */
+    /* ==========================================
+       PERBAIKAN KONTRAS HERO BANNER (KPH SUMEDANG)
+       ========================================== */
     .hero-banner {
-        background: linear-gradient(135deg, #112d22 0%, #1b4332 100%);
-        padding: 50px; border-radius: 16px; margin-bottom: 35px;
-        box-shadow: 0 20px 40px rgba(27, 67, 50, 0.15);
-        border: 1px solid #2d6a4f;
+        background: linear-gradient(135deg, #0b2218 0%, #16382a 100%);
+        padding: 55px; 
+        border-radius: 16px; 
+        margin-bottom: 35px;
+        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.15);
+        border: 1px solid #1b4332;
     }
+    
+    /* Judul Utama: Emas Mewah Kontras Tinggi */
     .hero-banner h1 { 
         font-family: 'Cinzel', serif;
-        color: #f4f1de !important; 
-        letter-spacing: 2px;
+        color: #dfc07b !important; /* Warna Emas Premium Kontras Tinggi */
+        font-size: 46px !important;
+        font-weight: 800 !important;
+        letter-spacing: 3px !important;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Drop shadow tipis agar makin pop-out */
     }
+    
+    /* Sub-deskripsi: Putih Sutra Terang */
     .hero-banner p { 
-        color: #b7e4c7 !important; 
-        font-size: 16px;
-        font-weight: 300;
+        color: #f4f1de !important; /* Warna Off-white Terang Kontras */
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.5px;
+        opacity: 0.95;
     }
     
     /* Sidebar Navigation panel (Warm Platinum/Ivory) */
@@ -68,13 +82,13 @@ st.markdown("""
     section[data-testid="stSidebar"] h4,
     section[data-testid="stSidebar"] span,
     section[data-testid="stSidebar"] label {
-        color: #1b4332 !important; 
+        color: #112d22 !important; 
         font-weight: 600 !important;
     }
     
-    /* Radio Button Text (Pilihan Menu) */
+    /* Radio Button Text (Pilihan Menu Navigasi) */
     div[data-testid="stRadio"] label p {
-        color: #34495e !important;
+        color: #2c3e50 !important;
         font-size: 15px !important;
         font-weight: 500 !important;
     }
@@ -84,26 +98,26 @@ st.markdown("""
         background: #ffffff !important; 
         border: 1px solid #e8e6df;
         border-radius: 14px; padding: 24px; text-align: left;
-        color: #2c3e50 !important; margin-bottom: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+        color: #1a2530 !important; margin-bottom: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
         transition: transform 0.2s ease;
     }
     .metric-box:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(27, 67, 50, 0.06);
+        box-shadow: 0 12px 30px rgba(22, 56, 42, 0.06);
     }
     .metric-box h4 {
-        color: #1b4332 !important;
+        color: #16382a !important;
         font-weight: 700 !important;
         margin-top: 0px;
     }
     .metric-box p, .metric-box li, .metric-box span {
-        color: #52616b !important;
+        color: #4a5568 !important;
         font-size: 14px !important;
     }
-    .metric-box b { color: #1b4332 !important; }
-    .metric-box-title { font-size: 12px; color: #8d99ae !important; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
-    .metric-box-value { font-size: 26px; font-weight: 700; color: #1b4332 !important; margin-top: 6px; font-family: 'Cinzel', serif; }
+    .metric-box b { color: #16382a !important; }
+    .metric-box-title { font-size: 12px; color: #a0aec0 !important; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+    .metric-box-value { font-size: 26px; font-weight: 700; color: #16382a !important; margin-top: 6px; font-family: 'Cinzel', serif; }
     .metric-box-delta { font-size: 13px; color: #2d6a4f !important; font-weight: 600; margin-top: 4px; }
     
     /* Kotak Informasi Berwarna Elegan */
@@ -113,23 +127,21 @@ st.markdown("""
         padding: 22px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px;
         color: #7c2d12 !important;
         border: 1px solid #fef3c7;
-        box-shadow: 0 4px 15px rgba(217, 119, 6, 0.03);
     }
     .info-box-warn h4 { color: #b45309 !important; margin-top: 0px !important; }
     
     .info-box-success {
         background-color: #f4f9f4 !important; 
-        border-left: 4px solid #2d6a4f !important;
+        border-left: 4px solid #16382a !important;
         padding: 22px; border-radius: 12px; margin-top: 20px; margin-bottom: 20px;
-        color: #1b4332 !important;
+        color: #112d22 !important;
         border: 1px solid #d8ebd4;
-        box-shadow: 0 4px 15px rgba(45, 106, 79, 0.03);
     }
-    .info-box-success h4 { color: #1b4332 !important; margin-top: 0px !important; }
+    .info-box-success h4 { color: #112d22 !important; margin-top: 0px !important; }
     
     /* Global Teks Override */
     .stMarkdown, p, span, li, label {
-        color: #34495e !important;
+        color: #2c3e50 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -176,7 +188,7 @@ logo_path = "OIP.webp"
 if os.path.exists(logo_path):
     st.sidebar.image(Image.open(logo_path), use_container_width=True)
 
-st.sidebar.markdown("<h2 style='text-align: center; margin-top:5px; font-size:20px; color:#1b4332; font-weight:700; font-family:\"Cinzel\", serif;'>KELOMPOK 2</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='text-align: center; margin-top:5px; font-size:20px; color:#16382a; font-weight:700; font-family:\"Cinzel\", serif;'>KELOMPOK 2</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #7f8c8d; font-size:12px; margin-top:-10px; letter-spacing:1px;'>EKONOMI SDA & LINGKUNGAN</p>", unsafe_allow_html=True)
 st.sidebar.markdown("<hr style='border-color: #e2e0d8;'>", unsafe_allow_html=True)
 
@@ -201,7 +213,7 @@ def apply_luxury_theme_layout(fig):
         plot_bgcolor='rgba(255,255,255,1)',
         paper_bgcolor='rgba(0,0,0,0)',
         font_color="#2c3e50",
-        title_font_color="#1b4332",
+        title_font_color="#16382a",
         legend_font_color="#2c3e50"
     )
     fig.update_xaxes(gridcolor='#f0eee6', title_font_color="#2c3e50", tickfont_color="#2c3e50")
@@ -216,7 +228,7 @@ def apply_luxury_theme_layout(fig):
 if menu == "🏠 Beranda Korporat Utama":
     st.markdown("""
     <div class="hero-banner">
-        <h1>KPH SUMEDANG ECO-FOREST VALUATION</h1>
+        <h1>KPH SUMEDANG<br>ECO-FOREST VALUATION</h1>
         <p>Sistem Pemodelan Nilai Ekonomi Lingkungan, Optimasi HHBK Pinus & Analisis Keberlanjutan Komoditas Kehutanan — PBL Kelompok 2</p>
     </div>
     """, unsafe_allow_html=True)
@@ -247,7 +259,7 @@ if menu == "🏠 Beranda Korporat Utama":
     
     with col_side:
         st.markdown("""
-        <div class='metric-box' style='border-top: 4px solid #1b4332;'>
+        <div class='metric-box' style='border-top: 4px solid #16382a;'>
             <h4>🎯 Kompetensi Analisis</h4>
             <p>• <b>Valuasi TEV:</b> Menilai aset nyata pasar dan non-pasar (karbon).</p>
             <p>• <b>Uji Sensitivitas Interaktif:</b> Simulasi ketahanan kas terhadap guncangan harga pasar.</p>
@@ -315,7 +327,7 @@ elif menu == "📦 Neraca Aliran Produksi":
     
     fig_prod = px.bar(
         df_produksi, x='Variabel', y='Nilai', color='Variabel', text_auto='.2s',
-        color_discrete_sequence=['#2d6a4f', '#4cc9f0'],
+        color_discrete_sequence=['#16382a', '#4cc9f0'],
         title="Volume Panen Komoditas Tahunan KPH Sumedang"
     )
     fig_prod = apply_luxury_theme_layout(fig_prod)
@@ -340,7 +352,7 @@ elif menu == "💰 Valuasi TEV & Ekonomi Makro":
     with col_pie:
         fig_pie = px.pie(
             df_komposisi, values='Persentase', names='Kategori', hole=0.4,
-            color_discrete_sequence=['#112d22', '#1b4332', '#40916c'],
+            color_discrete_sequence=['#0b2218', '#16382a', '#40916c'],
             title="Komposisi Kontribusi Manfaat Ekonomi Total (TEV)"
         )
         fig_pie = apply_luxury_theme_layout(fig_pie)
@@ -370,7 +382,7 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
     fig_tradeoff.add_trace(go.Bar(
         x=['Fokus Ekonomi', 'Fokus Ekologi'],
         y=[skor_pendapatan, skor_kelestarian],
-        marker_color=['#e67e22', '#1b4332'],
+        marker_color=['#e67e22', '#16382a'],
         text=[f"{skor_pendapatan:.1f} Pts", f"{skor_kelestarian:.1f} Pts"],
         textposition='auto'
     ))
@@ -408,26 +420,20 @@ elif menu == "⚖️ Batas Kebijakan Trade-Off":
     
     st.markdown("<br><hr style='border-color: #e2e0d8;'><center style='color: #7f8c8d; font-size: 12px;'>Sistem Simulasi Kebijakan disusun oleh: PBL Kelompok 2</center>", unsafe_allow_html=True)
 
-# MODUL 6: SLIDER SIMULASI FINANSIAL (LUXURY LIGHT BANNER)
+# MODUL 6: SLIDER SIMULASI FINANSIAL
 elif menu == "📊 Slider Simulasi Finansial":
     st.markdown("""
     <div style="
-        background: linear-gradient(135deg, #112d22 0%, #1b4332 100%);
-        padding: 45px; border-radius: 16px; text-align: center; margin-bottom: 35px;
-        box-shadow: 0 20px 40px rgba(27, 67, 50, 0.15);
-        border: 1px solid #2d6a4f;
+        background: linear-gradient(135deg, #0b2218 0%, #16382a 100%);
+        padding: 50px; border-radius: 16px; text-align: center; margin-bottom: 35px;
+        box-shadow: 0 20px 40px rgba(11, 34, 24, 0.15);
+        border: 1px solid #1b4332;
     ">
-        <h1 style="color: #f4f1de !important; font-family: 'Cinzel', serif; font-size: 42px; font-weight: 700; letter-spacing: 3px; margin: 0;">
-            🌳 ECO-FOREST
+        <h1 style="color: #dfc07b !important; font-family: 'Cinzel', serif; font-size: 44px; font-weight: 800; letter-spacing: 4px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);">
+            🌳 ECO-FOREST VALUATION SYSTEM
         </h1>
-        <h2 style="color: #b7e4c7 !important; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 300; letter-spacing: 5px; margin-top: 5px; margin-bottom: 15px;">
-            VALUATION SYSTEM
-        </h2>
-        <p style="color: #ffffff !important; font-size: 15px; font-weight: 300; opacity: 0.85; margin: 0; letter-spacing: 0.5px;">
-            Pemodelan Matematika Ekonomi Kelayakan Investasi Kehutanan
-        </p>
-        <p style="color: #f4f1de !important; font-size: 13px; font-weight: 600; margin-top: 8px; margin-bottom: 0; opacity: 0.90;">
-            📍 KPH Sumedang · Jawa Barat
+        <p style="color: #f4f1de !important; font-size: 16px; font-weight: 300; opacity: 0.90; margin-top: 10px; margin-bottom: 0; letter-spacing: 1px;">
+            Pemodelan Matematika Ekonomi Kelayakan Investasi Kehutanan · KPH Sumedang
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -494,7 +500,7 @@ elif menu == "📊 Slider Simulasi Finansial":
     fig_live = px.bar(
         chart_data, x='Skenario Analisis', y='Nilai NPV Terproyeksi (Rp)',
         color='Skenario Analisis', text_auto='.3s',
-        color_discrete_sequence=['#e63946', '#1b4332'],
+        color_discrete_sequence=['#e63946', '#16382a'],
         title="Grafik Komparatif Kelayakan Ekonomi KPH Sumedang (Analisis: PBL Kelompok 2)"
     )
     fig_live = apply_luxury_theme_layout(fig_live)
@@ -503,7 +509,7 @@ elif menu == "📊 Slider Simulasi Finansial":
     st.markdown(f"""
     > 📌 **Analisis Grafik Perbandingan NPV:**
     > * **Skenario B (Hijau Terintegrasi)** menghasilkan keuntungan finansial jauh lebih tinggi berkat inklusi nilai ekonomi serapan karbon hutan pinus.  
-    > * Selisih nilai tambah bersih dari penerapan ekonomi hijau di KPH Sumedang adalah sebesar **Rp {int(selisih_nvp):,}**.
+    > * Selisih nilai tambah bersih dari penerapan ekonomi hijau di KPH Sumedang adalah sebesar **Rp {int(selisih_npv):,}**.
     """)
 
     st.write("---")
